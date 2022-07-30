@@ -138,6 +138,7 @@ static void register_animations() {
 
    // Test animation
    animations[idx++]     = test_animation;
+   animations[idx++]     = fire_animation;
 
    // Add more animations here. Increase ANIMATION_FUNCTION_COUNT
    // accordingly. Otherwise the functions will not be called
