@@ -17,18 +17,20 @@
 #define MIN_BRIGHTNESS  32  // 0 to 255
 #define MAX_BRIGHTNESS  255 // 0 to 255
 
-// Pins
+// Pins for the buttons
 #define SWITCH_1     27
 #define SWITCH_2     26
+
+// Data pin for neopixel stripe
 #define DATA_PIN     15
+
+// Pin for ambient light sensor
+#define LDR_PIN      34
 
 // Size of the display
 #define LF_ROWS      13
 #define LF_COLS      13
 #define NUM_LEDS     LF_ROWS * LF_COLS
-
-// Ambient light sensor
-const int LDR_PIN = 34;  // photoresistor port
 
 // Type declarations
 typedef unsigned char byte;
@@ -211,8 +213,8 @@ void loop() {
 static int actual_Brightness = MAX_BRIGHTNESS;
 
 void adjust_global_brightness () {
-    const int minSensor = 2100;  // sensor value when totaly dark
-    const int maxSensor = 3500;  // sensor value when totaly bright
+    const int minSensor = 2100;  // sensor value when totally dark
+    const int maxSensor = 3500;  // sensor value when totally bright
     int lightValue = analogRead(LDR_PIN); 
     int targetBrightness =  min(MAX_BRIGHTNESS,max(MIN_BRIGHTNESS,((lightValue-maxSensor) * MAX_BRIGHTNESS) / (maxSensor-minSensor))); 
     actual_Brightness = actual_Brightness + (targetBrightness - actual_Brightness) / 3;
