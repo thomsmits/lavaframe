@@ -120,11 +120,12 @@ void push_to_strip() {
 
 #define ANIMATION_FUNCTION_COUNT 1
 
-// Array of all setup functions
-setup_function_t     setup_functions[ANIMATION_FUNCTION_COUNT];
+// Array of the animation functions
+animation_t animations[ANIMATION_FUNCTION_COUNT];
 
-// Array of all animation functions
-animation_function_t animation_functions[ANIMATION_FUNCTION_COUNT];
+// Animations
+extern animation_t test_animation;
+
 
 /**
  * Register all known animations. New animations must be added here.
@@ -133,9 +134,7 @@ void register_animations() {
    int idx = 0;
    
    // Test animation
-   animation_functions[idx] = loop_test_animation;
-   setup_functions[idx] = setup_test_animation;
-   idx++;
+   animations[idx++]     = test_animation;
 
    // Add more animations here. Increase ANIMATION_FUNCTION_COUNT
    // accordingly. Otherwise the functions will not be called
@@ -148,6 +147,8 @@ void register_animations() {
  */
 void setup() {
 
+    register_animations();
+    
     delay(3000);
     FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
  
@@ -161,7 +162,8 @@ void setup() {
 
     // Initialize the animations
     for (int i = 0; i < ANIMATION_FUNCTION_COUNT; i++) {
-        setup_functions[i]();
+        //setup_functions[i]();
+        animations[i].setup_f();
     }
 }
 
@@ -181,9 +183,10 @@ void loop() {
 
     int delay_in_msec = 0;
 
-    int ret_val = animation_functions[animation_index](loop_count, &delay_in_msec);
-
-    if (rev_val == ANIMATION_CONTINUE) {
+    // Call the current animation function    
+    int ret_val = animations[animation_index].animation_f(loop_count, &delay_in_msec);
+    
+    if (ret_val == ANIMATION_CONTINUE) {
         // sleep as requested by the animation
         delay(delay_in_msec);
     } else if (ret_val == ANIMATION_DONE) {
