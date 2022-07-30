@@ -1,6 +1,6 @@
 #include "animation.h"
 
-animation_t test_animation = {
+lf_animation_t test_animation = {
   setup_test_animation,
   loop_test_animation
 };
@@ -8,32 +8,32 @@ animation_t test_animation = {
 void setup_test_animation() {
 }
 
-int loop_test_animation(int loop_count, int *delay_in_msec) {
+int loop_test_animation(int *delay_in_msec) {
     static int x = 0;
     static int y = 0;
 
-    if (x >= COLS) {
+    if (x >= LF_COLS) {
         x = 0;
         y++;
     }
 
-    if (y >= ROWS) {
+    if (y >= LF_ROWS) {
         x = 0;
         y = 0;
-        return ANIMATION_DONE;
+        return LF_ANIMATION_DONE;
     }
 
     x++;
 
-    rgb_pixel_t *px = get_pixel(x, y);
+    rgb_pixel_t *px = lf_get_pixel(x, y);
     px->r = 10;
     px->g = 10;
     px->b = 100;
-    push_to_strip();
-    
-    clear();
+    lf_push_to_strip();
+
+    lf_clear();
 
     *delay_in_msec = 100;
-    
-    return ANIMATION_CONTINUE;
+
+    return LF_ANIMATION_CONTINUE;
 }

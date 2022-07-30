@@ -4,17 +4,23 @@
 
 // Returned by the animation function if it wants to be called
 // in the next loop
-#define ANIMATION_CONTINUE  1
+#define LF_ANIMATION_CONTINUE  1
 
 // Animation is finished, it does not want to be called again
-#define ANIMATION_DONE      2
+#define LF_ANIMATION_DONE      2
 
-typedef int  (*animation_function_t)(int, int*);
-typedef void (*setup_function_t)(void);
+typedef int  (*lf_animation_function_t)(int*);
+typedef void (*lf_setup_function_t)(void);
 
+/**
+ * Struct containing the callback functions for an animation.
+ */
 typedef struct {
-    setup_function_t     setup_f;
-    animation_function_t animation_f;
-} animation_t;
+    /** Setup function */
+    lf_setup_function_t     setup_f;
+
+    /** The animation itself */
+    lf_animation_function_t animation_f;
+} lf_animation_t;
 
 #endif
