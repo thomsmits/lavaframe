@@ -29,6 +29,7 @@
 // Type declarations
 typedef unsigned char byte;
 
+// A single pixel
 typedef struct {
     byte r;
     byte g;
@@ -161,10 +162,11 @@ void setup() {
     }
 }
 
-
+// Counter for the loops
 static int loop_count = 0;
-static int animation_index = 0;
 
+// index of the current animation
+static int animation_index = 0;
 
 /**
  * Main loop.
