@@ -6,5 +6,6 @@
  |______\__,_| \_/ \__,_|_|  |_|  \__,_|_| |_| |_|\___|
                                                        
                                                        
-     LavaFrame - a meditative stylish light object
+      LavaFrame. A meditative stylish light object
 
+   created 2020 by Thomas Smits and Daniel Springwald
