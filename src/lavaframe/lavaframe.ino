@@ -131,6 +131,7 @@ lf_animation_t animations[ANIMATION_FUNCTION_COUNT];
 
 // Animations
 extern lf_animation_t test_animation;
+extern lf_animation_t fire_animation;
 
 /**
  * Register all known animations. New animations must be added here.
@@ -139,8 +140,8 @@ static void register_animations() {
    int idx = 0;
 
    // Test animation
-   animations[idx++]     = test_animation;
    animations[idx++]     = fire_animation;
+   //animations[idx++]     = test_animation;
 
    // Add more animations here. Increase ANIMATION_FUNCTION_COUNT
    // accordingly. Otherwise the functions will not be called
@@ -213,8 +214,8 @@ void loop() {
 static int actual_Brightness = MAX_BRIGHTNESS;
 
 void adjust_global_brightness () {
-    const int minSensor = 2100;  // sensor value when totally dark
-    const int maxSensor = 3500;  // sensor value when totally bright
+    const int minSensor = 2100;  // sensor value when totally dark (0 to 4096)
+    const int maxSensor = 3500;  // sensor value when totally bright (0 to 4096)
     int lightValue = analogRead(LDR_PIN); 
     int targetBrightness =  min(MAX_BRIGHTNESS,max(MIN_BRIGHTNESS,((lightValue-maxSensor) * MAX_BRIGHTNESS) / (maxSensor-minSensor))); 
     actual_Brightness = actual_Brightness + (targetBrightness - actual_Brightness) / 3;
