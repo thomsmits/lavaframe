@@ -1,13 +1,23 @@
 #include "animation.h"
 
+// This animation
 lf_animation_t test_animation = {
   setup_test_animation,
   loop_test_animation
 };
 
+/**
+ * Setup the animation.
+ */
 void setup_test_animation() {
 }
 
+/**
+ * Function called in a loop.
+ * 
+ * @param (out) delay_in_msec the delay requested by the function
+ * @return constant requesting the next action of the loop
+ */
 int loop_test_animation(int *delay_in_msec) {
     static int x = 0;
     static int y = 0;
