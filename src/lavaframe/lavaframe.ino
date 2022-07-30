@@ -12,9 +12,10 @@
 #include "animation.h"
 
 // Settings for the FastLED library
-#define LED_TYPE     WS2811
-#define COLOR_ORDER  GRB
-#define BRIGHTNESS   96
+#define LED_TYPE        WS2811
+#define COLOR_ORDER     GRB
+#define MIN_BRIGHTNESS  32  // 0 to 255
+#define MAX_BRIGHTNESS  255 // 0 to 255
 
 // Pins
 #define SWITCH_1     27
@@ -25,6 +26,9 @@
 #define LF_ROWS      13
 #define LF_COLS      13
 #define NUM_LEDS     LF_ROWS * LF_COLS
+
+// Ambient light sensor
+const int LDR_PIN = 34;  // photoresistor port
 
 // Type declarations
 typedef unsigned char byte;
@@ -151,10 +155,9 @@ void setup() {
     delay(3000);
     FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
-    // set master brightness control
-    FastLED.setBrightness(BRIGHTNESS);
-
     setup_trace();
+
+    adjust_global_brightness();
 
     pinMode(SWITCH_1, INPUT_PULLDOWN);
     pinMode(SWITCH_2, INPUT_PULLDOWN);
@@ -185,6 +188,8 @@ void loop() {
     // Call the current animation function
     int ret_val = animations[animation_index].animation_f(&delay_in_msec);
 
+    EVERY_N_MILLISECONDS( 500 ) { adjust_global_brightness(); }
+    
     if (ret_val == LF_ANIMATION_CONTINUE) {
         // sleep as requested by the animation
         delay(delay_in_msec);
@@ -200,3 +205,15 @@ void loop() {
 
     loop_count++; // wrap around is intended!
 }
+
+
+static int actual_Brightness = MAX_BRIGHTNESS;
+
+void adjust_global_brightness () {
+    const int minSensor = 2100;  // sensor value when totaly dark
+    const int maxSensor = 3500;  // sensor value when totaly bright
+    int lightValue = analogRead(LDR_PIN); 
+    int targetBrightness =  min(MAX_BRIGHTNESS,max(MIN_BRIGHTNESS,((lightValue-maxSensor) * MAX_BRIGHTNESS) / (maxSensor-minSensor))); 
+    actual_Brightness = actual_Brightness + (targetBrightness - actual_Brightness) / 3;
+    FastLED.setBrightness(actual_Brightness);   // set master brightness control
+} 
