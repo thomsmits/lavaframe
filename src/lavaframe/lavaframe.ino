@@ -12,9 +12,9 @@
 #include "animation.h"
 
 // Settings for the FastLED library
-#define LED_TYPE    WS2811
-#define COLOR_ORDER GRB
-#define BRIGHTNESS          96
+#define LED_TYPE     WS2811
+#define COLOR_ORDER  GRB
+#define BRIGHTNESS   96
 
 // Pins 
 #define SWITCH_1     27
@@ -22,8 +22,8 @@
 #define DATA_PIN     15
 
 // Size of the display
-#define ROWS 13
-#define COLS 13
+#define ROWS         13
+#define COLS         13
 #define NUM_LEDS     ROWS * COLS
 
 // Type declarations
@@ -120,8 +120,11 @@ void push_to_strip() {
 
 #define ANIMATION_FUNCTION_COUNT 1
 
-animation_function_t animation_functions[ANIMATION_FUNCTION_COUNT];
+// Array of all setup functions
 setup_function_t     setup_functions[ANIMATION_FUNCTION_COUNT];
+
+// Array of all animation functions
+animation_function_t animation_functions[ANIMATION_FUNCTION_COUNT];
 
 /**
  * Register all known animations. New animations must be added here.
