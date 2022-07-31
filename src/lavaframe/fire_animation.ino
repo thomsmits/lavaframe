@@ -7,14 +7,16 @@ lf_animation_t fire_animation = {
 
 const int slowDown = 1;
 
-const int baselines = 4;                // how many moving fire emitters on the baseline?
-int baseline_x[baselines];              // position of all emitters
-int baseline_counter[baselines];        // emitter movement counter
-int baseline_direction[baselines];      // emitter moving direction
+const int emitters = 4;               // how many moving fire emitters on the baseline?
+int emitter_x[emitters];              // x-position of all emitters
+int emitter_y[emitters];              // y-position of all emitters
+int emitter_counter[emitters];        // emitter movement counter
+int emitter_direction_x[emitters];    // emitter moving in x direction
+int emitter_direction_y[emitters];    // emitter moving in y direction
+int emitter_maxtop_y = LF_ROWS-1;     // how high can an emitter go? 0 = max top, LF_ROWS-1 = baseline
 
-int fire_animation_field[LF_COLS][LF_ROWS];
+int fire_animation_field[LF_COLS][LF_ROWS+1];
 rgb_pixel_t fire_animation_palette[255];
-
 
 void setup_fire_animation() {
   
@@ -26,19 +28,20 @@ void setup_fire_animation() {
     } 
   }
 
-  for (int i=0; i <baselines; i++) {
-    baseline_direction[i] = 1;
+  for (int i=0; i < emitters; i++) {
+    emitter_direction_x[i] = random(1,2);
+    emitter_direction_y[i] = random(1,2);
   }
   
 }
 
 int loop_fire_animation(int *delay_in_msec) {
   
-    fire_animation_generateBaseline();
+    fire_animation_generate_emitter();
     fire_animation_calc_fire();
     fire_animation_fire_to_leds();
 
-    *delay_in_msec = 30 * slowDown;
+    *delay_in_msec = 30;
 
     return LF_ANIMATION_CONTINUE;
 }
@@ -66,7 +69,7 @@ void fire_animation_calc_fire()
             int belowVal = fire_animation_field[x][y + 1];
 
             int sum = leftVal + rightVal + (belowVal * 2);
-            int avg = (int)(0.85 * sum / 4);
+            int avg = (int)(0.9 * sum / 4);
 
             // auto reduce it so you get lest of the forced fade and more vibrant fire waves
             if (avg > 0)
@@ -81,23 +84,50 @@ void fire_animation_calc_fire()
     }
 }
 
-void fire_animation_generateBaseline()
+void fire_animation_generate_emitter()
 {
   for (int x = 0; x < LF_COLS; x++) {
      fire_animation_field[x][LF_ROWS-1] = 0;
   }
 
-  for (int i=0; i < baselines;i++) {
-    baseline_counter[i]++;
-    if (baseline_counter[i] > (i+2) * slowDown) {
-      baseline_counter[i] =0;
-      baseline_x[i] += baseline_direction[i];
-      if (baseline_x[i] >= LF_COLS || baseline_x[i]==0) baseline_direction[i] = -baseline_direction[i];
+  for (int i=0; i < emitters;i++) {
+    emitter_counter[i]++;
+    if (emitter_counter[i] > (max(i*2,1)) * slowDown) {
+      
+      emitter_counter[i] =0;
+      
+      emitter_x[i] += emitter_direction_x[i];
+      emitter_y[i] += emitter_direction_y[i];
+
+      if (emitter_x[i] >= LF_COLS) {
+         emitter_direction_x[i] = -random(1,3);
+         emitter_x[i] = LF_COLS-1;
+      }       
+      if (emitter_x[i] < 0) {
+        emitter_direction_x[i] = random(1,3);
+         emitter_x[i] = 0;
+      }       
+      
+      if (emitter_y[i] >= LF_ROWS) {
+         emitter_direction_y[i] = -random(1,3);
+         emitter_y[i] = LF_ROWS-1;
+      }       
+      if (emitter_y[i] < emitter_maxtop_y) {
+        emitter_direction_y[i] = random(1,3);
+        emitter_y[i] = emitter_maxtop_y;
+      }         
     }
 
-    for (int x = 0; x < LF_COLS; x++) {
-      if (x >= baseline_x[i] - 1 && x <= baseline_x[i] + 1) {
-        fire_animation_field[x][LF_ROWS-1] = 255; // - (abs(baseline_x[i]-x)*5);
+    for (int x = -1; x <= 1; x++) {
+      for (int y = 0; y <= 0; y++) {
+        
+        int e_x = emitter_x[i] + x;
+        int e_y = emitter_y[i] + y;
+        
+        if (e_x >= 0 && e_x < LF_COLS && e_y >= 0 && e_y < LF_ROWS) { 
+          fire_animation_field[e_x][e_y] = 255; // - abs(x) -abs(y);
+        }
+        
       }
     }
   }
@@ -137,5 +167,28 @@ void fire_animation_setup_palette()
         fire_animation_palette[i+192].r = (byte)(255 + - i * 4);
         fire_animation_palette[i+192].g = (byte)(255);
         fire_animation_palette[i+192].b = (byte)(i * 4);
+    }    
+}
+
+
+void fire_animation_setup_palette_blue()
+{
+    for (int i = 0; i < 64; i++)
+    {
+        fire_animation_palette[i].r = (byte)(i * 4);
+        fire_animation_palette[i].g = (byte)(0);
+        fire_animation_palette[i].b = (byte)(0);
+
+        fire_animation_palette[i+64].r = (byte)(0);
+        fire_animation_palette[i+64].g = (byte)(i * 4);
+        fire_animation_palette[i+64].b = (byte)(255);
+
+        fire_animation_palette[i+128].r = (byte)(i * 4);
+        fire_animation_palette[i+128].g = (byte)(255);
+        fire_animation_palette[i+128].b = (byte)(255);
+
+        fire_animation_palette[i+192].r = (byte)(255 + - i * 4);
+        fire_animation_palette[i+192].g = (byte)(i * 4);
+        fire_animation_palette[i+192].b = (byte)(255);
     }    
 }
