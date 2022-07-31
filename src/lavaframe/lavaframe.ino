@@ -18,8 +18,8 @@
 #define MAX_BRIGHTNESS  255 // 0 to 255
 
 // Pins for the buttons
-#define SWITCH_1     27
-#define SWITCH_2     26
+#define SWITCH_1_PIN  27
+#define SWITCH_2_PIN  26
 
 // Data pin for neopixel stripe
 #define DATA_PIN     15
@@ -124,14 +124,25 @@ void lf_push_to_strip() {
 }
 
 
-#define ANIMATION_FUNCTION_COUNT 1
+bool lf_animation_choice_switch_pressed() {
+  return digitalRead(SWITCH_1_PIN) == HIGH;
+}
+
+bool lf_function_switch_1_pressed() {
+   return digitalRead(SWITCH_2_PIN) == HIGH;
+}
+
+
+#define ANIMATION_FUNCTION_COUNT 3
 
 // Array of the animation functions
 lf_animation_t animations[ANIMATION_FUNCTION_COUNT];
 
 // Animations
-extern lf_animation_t test_animation;
 extern lf_animation_t fire_animation;
+extern lf_animation_t circle_animation;
+extern lf_animation_t test_animation;
+
 
 /**
  * Register all known animations. New animations must be added here.
@@ -141,7 +152,8 @@ static void register_animations() {
 
    // Test animation
    animations[idx++]     = fire_animation;
-   //animations[idx++]     = test_animation;
+   animations[idx++]     = circle_animation;
+   animations[idx++]     = test_animation;
 
    // Add more animations here. Increase ANIMATION_FUNCTION_COUNT
    // accordingly. Otherwise the functions will not be called
@@ -161,10 +173,11 @@ void setup() {
 
     setup_trace();
 
-    adjust_global_brightness();
+    pinMode(SWITCH_1_PIN, INPUT_PULLDOWN);
+    pinMode(SWITCH_2_PIN, INPUT_PULLDOWN);
+    pinMode(LDR_PIN, INPUT_PULLDOWN);
 
-    pinMode(SWITCH_1, INPUT_PULLDOWN);
-    pinMode(SWITCH_2, INPUT_PULLDOWN);
+     adjust_global_brightness();
 
     // Initialize the animations
     for (int i = 0; i < ANIMATION_FUNCTION_COUNT; i++) {
@@ -184,17 +197,18 @@ static int animation_index = 0;
  */
 void loop() {
 
-    int switch_1 = digitalRead(SWITCH_1);
-    int switch_2 = digitalRead(SWITCH_2);
-
     int delay_in_msec = 0;
 
     // Call the current animation function
     int ret_val = animations[animation_index].animation_f(&delay_in_msec);
 
     EVERY_N_MILLISECONDS( 500 ) { adjust_global_brightness(); }
-    
-    if (ret_val == LF_ANIMATION_CONTINUE) {
+
+    if (lf_animation_choice_switch_pressed()) {
+        // force next animation
+        animation_index++; 
+        while(lf_animation_choice_switch_pressed()) {delay(100);}
+    } else if (ret_val == LF_ANIMATION_CONTINUE) {
         // sleep as requested by the animation
         delay(delay_in_msec);
     } else if (ret_val == LF_ANIMATION_DONE) {
@@ -210,6 +224,10 @@ void loop() {
     loop_count++; // wrap around is intended!
 }
 
+
+/**
+ * brightness adjustment
+ */
 
 static int actual_Brightness = MAX_BRIGHTNESS;
 
