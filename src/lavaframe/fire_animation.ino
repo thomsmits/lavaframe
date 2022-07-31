@@ -57,25 +57,29 @@ void fire_animation_next_scene() {
   switch (fire_animation_scene) {
     
     case 2:
+       fire_animation_slowDown = 1;
        fire_animation_intensity = 9;
        fire_animation_setup_palette_blue();
        fire_animation_emitter_maxtop_y = LF_ROWS-1; 
        break;
        
     case 3:
+      fire_animation_slowDown = 1;
       fire_animation_setup_palette_fire();
       fire_animation_intensity = 10;
       fire_animation_emitter_maxtop_y = 0; 
       break;
 
     case 4:
+      fire_animation_slowDown = 1;
       fire_animation_setup_palette_blue();
       fire_animation_intensity = 10;
       fire_animation_emitter_maxtop_y = LF_ROWS-1; 
       break;
-      
+     
     default:
       // standard fire
+      fire_animation_slowDown = 1;
       fire_animation_setup_palette_fire();
       fire_animation_intensity = 9;
       fire_animation_emitter_maxtop_y = LF_ROWS-1; 
@@ -227,18 +231,18 @@ void fire_animation_setup_palette_blue()
     {
         fire_animation_palette[i].r = (byte)(i * 4);
         fire_animation_palette[i].g = (byte)(0);
-        fire_animation_palette[i].b = (byte)(0);
+        fire_animation_palette[i].b = (byte)(i * 4);
 
-        fire_animation_palette[i+64].r = (byte)(0);
-        fire_animation_palette[i+64].g = (byte)(i * 4);
+        fire_animation_palette[i+64].r = (byte)(255 -  i*4);
+        fire_animation_palette[i+64].g = (byte)(0);
         fire_animation_palette[i+64].b = (byte)(255);
 
         fire_animation_palette[i+128].r = (byte)(i * 4);
-        fire_animation_palette[i+128].g = (byte)(255);
+        fire_animation_palette[i+128].g = (byte)(i * 4);
         fire_animation_palette[i+128].b = (byte)(255);
 
-        fire_animation_palette[i+192].r = (byte)(255 + - i * 4);
-        fire_animation_palette[i+192].g = (byte)(i * 4);
-        fire_animation_palette[i+192].b = (byte)(255);
+        fire_animation_palette[i+192].r = (byte)(255 - i * 4);
+        fire_animation_palette[i+192].g = (byte)(255 - i * 4);
+        fire_animation_palette[i+192].b = (byte)(255 - i * 4);
     }    
 }
