@@ -7,6 +7,8 @@ lf_animation_t fire_animation = {
 
 const int slowDown = 1;
 
+const double intensity = 0.9;         // 0.8 - 1
+
 const int emitters = 4;               // how many moving fire emitters on the baseline?
 int emitter_x[emitters];              // x-position of all emitters
 int emitter_y[emitters];              // y-position of all emitters
@@ -69,7 +71,7 @@ void fire_animation_calc_fire()
             int belowVal = fire_animation_field[x][y + 1];
 
             int sum = leftVal + rightVal + (belowVal * 2);
-            int avg = (int)(0.9 * sum / 4);
+            int avg = (int)(intensity * sum / 4);
 
             // auto reduce it so you get lest of the forced fade and more vibrant fire waves
             if (avg > 0)
