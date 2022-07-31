@@ -11,6 +11,7 @@
 
 typedef int  (*lf_animation_function_t)(int*);
 typedef void (*lf_setup_function_t)(void);
+typedef void (*lf_reset_function_t)(void);
 
 /**
  * Struct containing the callback functions for an animation.
@@ -18,6 +19,9 @@ typedef void (*lf_setup_function_t)(void);
 typedef struct {
     /** Setup function */
     lf_setup_function_t     setup_f;
+
+    /** Reset function */
+    lf_reset_function_t     reset_f;
 
     /** The animation itself */
     lf_animation_function_t animation_f;

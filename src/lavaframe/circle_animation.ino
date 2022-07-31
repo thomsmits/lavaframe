@@ -4,6 +4,7 @@
 // This animation
 lf_animation_t circle_animation = {
   setup_circle_animation,
+  reset_circle_animation,
   loop_circle_animation_3
 };
 
@@ -12,6 +13,14 @@ lf_animation_t circle_animation = {
  */
 void setup_circle_animation() {
 }
+
+
+/**
+ * reset the animation.
+ */
+void reset_circle_animation() {
+}
+
 
 /**
  * Function called in a loop.

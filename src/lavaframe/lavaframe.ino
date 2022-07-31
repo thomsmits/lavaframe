@@ -140,6 +140,7 @@ lf_animation_t animations[ANIMATION_FUNCTION_COUNT];
 
 // Animations
 extern lf_animation_t fire_animation;
+//extern lf_animation_t plasma_animation;
 extern lf_animation_t circle_animation;
 extern lf_animation_t test_animation;
 
@@ -152,6 +153,7 @@ static void register_animations() {
 
    // Test animation
    animations[idx++]     = fire_animation;
+   //animations[idx++]     = plasma_animation;
    animations[idx++]     = circle_animation;
    animations[idx++]     = test_animation;
 
@@ -204,10 +206,12 @@ void loop() {
 
     EVERY_N_MILLISECONDS( 500 ) { adjust_global_brightness(); }
 
+    int last_animation_index = animation_index;
+
     if (lf_animation_choice_switch_pressed()) {
         // force next animation
         animation_index++; 
-        while(lf_animation_choice_switch_pressed()) {delay(100);}
+        while(lf_animation_choice_switch_pressed()) {delay(10);}
     } else if (ret_val == LF_ANIMATION_CONTINUE) {
         // sleep as requested by the animation
         delay(delay_in_msec);
@@ -216,9 +220,12 @@ void loop() {
         animation_index++;
     }
 
-    if (animation_index >= ANIMATION_FUNCTION_COUNT) {
-        // All animations done, start from beginning
-        animation_index = 0;
+    if (last_animation_index != animation_index) {
+      if (animation_index >= ANIMATION_FUNCTION_COUNT) {
+          // All animations done, start from beginning
+          animation_index = 0;
+      }
+      animations[animation_index].reset_f();
     }
 
     loop_count++; // wrap around is intended!

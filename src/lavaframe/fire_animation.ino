@@ -2,6 +2,7 @@
 
 lf_animation_t fire_animation = {
   setup_fire_animation,
+  setup_fire_animation,
   loop_fire_animation
 };
 
@@ -22,22 +23,14 @@ rgb_pixel_t fire_animation_palette[255];
 int fire_animation_scene = 0;
 
 void setup_fire_animation() {
-
   fire_animation_scene = 0;
-
   fire_animation_next_scene();
-
-  for (int i=0; i < fire_animation_emitters; i++) {
-    fire_animation_emitter_direction_x[i] = random(1,2);
-    fire_animation_emitter_direction_y[i] = random(1,2);
-  }
-  
 }
 
 int loop_fire_animation(int *delay_in_msec) {
 
     if (lf_function_switch_1_pressed()) {
-      while (lf_function_switch_1_pressed())  { delay(100); }
+      while (lf_function_switch_1_pressed())  { delay(10); }
       fire_animation_next_scene();
     }
      

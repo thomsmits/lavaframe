@@ -3,7 +3,8 @@
 // This animation
 lf_animation_t test_animation = {
   setup_test_animation,
-  loop_test_animation
+  setup_test_animation,
+  loop_test_animation,
 };
 
 /**
