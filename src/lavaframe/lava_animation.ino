@@ -28,8 +28,7 @@ void setup_lava_animation() {
     lava_animation_bubble_radius[i] = 1 + (i / 2);
   }
 
-  //lava_animation_setup_palette();
-  lava_animation_setup_palette2();
+  lava_animation_setup_palette();
   
 }
 
@@ -85,29 +84,16 @@ void draw_bubble(int i) {
       } else{
         col = int(255 - (dist-radius) * 255);  
       }
-     // col = col + lava_animation_field[x][y];
-     // lava_animation_field[x][y]= max(0, min(255, col));
-
-      
       lava_animation_field[x][y] = max(lava_animation_field[x][y], min(255, col));
     }  
   }
 }
 
 
+
 void lava_animation_setup_palette()
 {
-    for (int i = 0; i <= 255; i++)
-    {
-        lava_animation_palette[i].r = (byte)(i);
-        lava_animation_palette[i].g = (byte)(0);
-        lava_animation_palette[i].b = (byte)(i);
-    }    
-}
-
-void lava_animation_setup_palette2()
-{
- int dim = 2;
+ int dim = 1;
   
     for (int i = 0; i < 128; i++)
     {
