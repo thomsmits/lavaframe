@@ -139,10 +139,11 @@ bool lf_function_switch_1_pressed() {
 lf_animation_t animations[ANIMATION_FUNCTION_COUNT];
 
 // Animations
+extern lf_animation_t lava_animation;
 extern lf_animation_t fire_animation;
 //extern lf_animation_t plasma_animation;
 extern lf_animation_t circle_animation;
-extern lf_animation_t test_animation;
+//extern lf_animation_t test_animation;
 
 
 /**
@@ -151,11 +152,11 @@ extern lf_animation_t test_animation;
 static void register_animations() {
    int idx = 0;
 
-   // Test animation
+   animations[idx++]     = lava_animation;
    animations[idx++]     = fire_animation;
-   //animations[idx++]     = plasma_animation;
+   //animations[idx++]   = plasma_animation;
    animations[idx++]     = circle_animation;
-   animations[idx++]     = test_animation;
+   //animations[idx++]     = test_animation;
 
    // Add more animations here. Increase ANIMATION_FUNCTION_COUNT
    // accordingly. Otherwise the functions will not be called

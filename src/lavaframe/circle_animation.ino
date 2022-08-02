@@ -5,7 +5,7 @@
 lf_animation_t circle_animation = {
   setup_circle_animation,
   reset_circle_animation,
-  loop_circle_animation_3
+  loop_circle_animation_1
 };
 
 /**
