@@ -7,7 +7,7 @@ lf_animation_t lava_animation = {
 };
 
 
-const int lava_animation_bubbles    = 5;    // how many moving bubbles?
+const int lava_animation_bubbles = 6;    // how many moving bubbles?
 
 int lava_animation_scene = 0;
 
@@ -17,21 +17,12 @@ int lava_animation_bubble_radius[lava_animation_bubbles];           // sizes of 
 double lava_animation_bubble_direction_x[lava_animation_bubbles];   // bubbles moving in x direction
 double lava_animation_bubble_direction_y[lava_animation_bubbles];   // bubbles moving in y direction
 
+double lava_animation_bubble_size;
+
 int lava_animation_field[LF_COLS][LF_ROWS];
 rgb_pixel_t lava_animation_palette[255];
 
 void setup_lava_animation() {
-
-  int border = 3;
-
-  for (int i=0; i < lava_animation_bubbles; i++) {
-    lava_animation_bubble_x[i] = border + (((LF_COLS -2 -border*2) * i )/ lava_animation_bubbles ) ;
-    lava_animation_bubble_y[i] = (i * 3) % LF_ROWS;
-    lava_animation_bubble_direction_x[i] = 0; //random(1,2);
-    lava_animation_bubble_direction_y[i] = 0.01 + i / 200.0;
-    lava_animation_bubble_radius[i] = (int)(1 + (i * 0.6));
-  }
-
   lava_animation_scene = 0;
   lava_animation_next_scene();
 }
@@ -43,20 +34,34 @@ void lava_animation_next_scene() {
   switch (lava_animation_scene) {
     case 2:
        lava_animation_setup_palette({0, 255, 0}, {0, 64, 0}, {128, 0, 128}); // green, purple background
+       lava_animation_bubble_size = 0.35;
        break;
        
     case 3:
-      lava_animation_setup_palette({255, 0,0}, {128, 0, 0}, {0, 0, 0}); // red
+      lava_animation_setup_palette({255, 0,0}, {64, 0, 0}, {0, 0, 0}); // red
+      lava_animation_bubble_size = 0.35;
       break;
 
     case 4:
       lava_animation_setup_palette({255, 255, 255}, {0, 0, 0}, {0, 0, 64}); // white, blue background
+      lava_animation_bubble_size = 0.4;
       break;
      
     default:
       lava_animation_setup_palette({255, 0,255}, {0, 0, 255}, {0, 0, 0}); // purple, blue border
+      lava_animation_bubble_size = 0.55;
       lava_animation_scene = 1;
       break; 
+  }
+
+  int border = 3;
+
+  for (int i=0; i < lava_animation_bubbles; i++) {
+    lava_animation_bubble_x[i] = border + (((LF_COLS -2 -border*2) * i )/ lava_animation_bubbles ) ;
+    lava_animation_bubble_y[i] = (i * 3) % LF_ROWS;
+    lava_animation_bubble_direction_x[i] = 0; //random(1,2);
+    lava_animation_bubble_direction_y[i] = 0.01 + i / 200.0;
+    lava_animation_bubble_radius[i] = (int)(1 + (i * lava_animation_bubble_size));
   }
 }
 
@@ -98,7 +103,7 @@ void calc_bubble(int i) {
     
     if (lava_animation_bubble_y[i] >= LF_ROWS-1 ) {
        lava_animation_bubble_direction_y[i] = -lava_animation_bubble_direction_y[i];
-       lava_animation_bubble_y[i] = LF_ROWS-2;
+       lava_animation_bubble_y[i] = LF_ROWS-1;
     }       
 }
 
