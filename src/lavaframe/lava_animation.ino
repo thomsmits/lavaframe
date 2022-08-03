@@ -7,7 +7,9 @@ lf_animation_t lava_animation = {
 };
 
 
-const int lava_animation_bubbles    = 6;    // how many moving bubbles?
+const int lava_animation_bubbles    = 5;    // how many moving bubbles?
+
+int lava_animation_scene = 0;
 
 double lava_animation_bubble_x[lava_animation_bubbles];             // x-position of bubbles
 double lava_animation_bubble_y[lava_animation_bubbles];             // y-position of bubbles
@@ -19,22 +21,53 @@ int lava_animation_field[LF_COLS][LF_ROWS];
 rgb_pixel_t lava_animation_palette[255];
 
 void setup_lava_animation() {
-  
+
+  int border = 3;
+
   for (int i=0; i < lava_animation_bubbles; i++) {
-    lava_animation_bubble_x[i] = LF_COLS * 0.25 + (i * 5) % (LF_COLS / 2);
+    lava_animation_bubble_x[i] = border + (((LF_COLS -2 -border*2) * i )/ lava_animation_bubbles ) ;
     lava_animation_bubble_y[i] = (i * 3) % LF_ROWS;
     lava_animation_bubble_direction_x[i] = 0; //random(1,2);
     lava_animation_bubble_direction_y[i] = 0.01 + i / 200.0;
-    lava_animation_bubble_radius[i] = 1 + (i / 2);
+    lava_animation_bubble_radius[i] = (int)(1 + (i * 0.6));
   }
 
-  lava_animation_setup_palette();
+  lava_animation_scene = 0;
+  lava_animation_next_scene();
+}
+
+void lava_animation_next_scene() {
   
+  lava_animation_scene++;
+  
+  switch (lava_animation_scene) {
+    case 2:
+       lava_animation_setup_palette({0, 255, 0}, {0, 64, 0}, {128, 0, 128}); // green, purple background
+       break;
+       
+    case 3:
+      lava_animation_setup_palette({255, 0,0}, {128, 0, 0}, {0, 0, 0}); // red
+      break;
+
+    case 4:
+      lava_animation_setup_palette({255, 255, 255}, {0, 0, 0}, {0, 0, 64}); // white, blue background
+      break;
+     
+    default:
+      lava_animation_setup_palette({255, 0,255}, {0, 0, 255}, {0, 0, 0}); // purple, blue border
+      lava_animation_scene = 1;
+      break; 
+  }
 }
 
 int loop_lava_animation(int *delay_in_msec) {
 
     *delay_in_msec = 30;
+
+     if (lf_function_switch_1_pressed()) {
+      while (lf_function_switch_1_pressed())  { delay(10); }
+      lava_animation_next_scene();
+    }
 
     // clear field
     for (int x = 0; x < LF_COLS; x++) {
@@ -82,31 +115,29 @@ void draw_bubble(int i) {
       if (radius > dist)  {
         col = 255;
       } else{
-        col = int(255 - (dist-radius) * 255);  
+        col = int(255 - (dist * 0.9 -radius) * 255);  
       }
       lava_animation_field[x][y] = max(lava_animation_field[x][y], min(255, col));
     }  
   }
 }
 
-
-
-void lava_animation_setup_palette()
+void lava_animation_setup_palette(rgb_pixel_t color_lava, rgb_pixel_t color_border, rgb_pixel_t color_background)
 {
- int dim = 1;
-  
-    for (int i = 0; i < 128; i++)
+    for (int i = 0; i <= 128; i++)
     {
-        lava_animation_palette[255-i].r = (byte)(255 - i * 2) / dim; 
-        lava_animation_palette[255-i].g = (byte)(0);
-        lava_animation_palette[255-i].b = (byte)(255)/ dim;
+        lava_animation_palette[255-i].r = lava_animation_col_interpolate(color_lava.r, color_border.r, 128, i); 
+        lava_animation_palette[255-i].g = lava_animation_col_interpolate(color_lava.g, color_border.g, 128, i); 
+        lava_animation_palette[255-i].b = lava_animation_col_interpolate(color_lava.b, color_border.b, 128, i); 
 
-        lava_animation_palette[128-i].r = (byte)(0);
-        lava_animation_palette[128-i].g = (byte)(0);
-        lava_animation_palette[128-i].b = (byte)(255 - i * 2)/ dim;
+        lava_animation_palette[128-i].r = lava_animation_col_interpolate(color_border.r, color_background.r, 128, i); 
+        lava_animation_palette[128-i].g = lava_animation_col_interpolate(color_border.g, color_background.g, 128, i); 
+        lava_animation_palette[128-i].b = lava_animation_col_interpolate(color_border.b, color_background.b, 128, i); 
     }
+}
 
-
+byte lava_animation_col_interpolate(byte startValue, byte endValue, int steps, int pos) {
+  return (byte)(startValue + ((endValue - startValue) * pos) / steps);
 }
 
 void lava_animation_field_to_leds()
