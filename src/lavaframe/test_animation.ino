@@ -37,8 +37,8 @@ int loop_test_animation(int *delay_in_msec) {
     x++;
 
     rgb_pixel_t *px = lf_get_pixel(x, y);
-    px->r = 10;
-    px->g = 10;
+    px->r = 100;
+    px->g = 100;
     px->b = 100;
     lf_push_to_strip();
 

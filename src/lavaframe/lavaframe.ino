@@ -7,6 +7,8 @@
  */
 #include <FastLED.h>
 
+#include "buttons.h"
+
 #define DEBUG_OUTPUT
 #include "trace.h"
 #include "animation.h"
@@ -15,22 +17,25 @@
 #define LED_TYPE        WS2811
 #define COLOR_ORDER     GRB
 #define MIN_BRIGHTNESS  32  // 0 to 255
-#define MAX_BRIGHTNESS  255 // 0 to 255
+#define MAX_BRIGHTNESS  128 // 0 to 255
 
 // Pins for the buttons
-#define SWITCH_1_PIN  27
-#define SWITCH_2_PIN  26
+#define BUTTON_1_PIN  27
+#define BUTTON_2_PIN  26
 
 // Data pin for neopixel stripe
 #define DATA_PIN     15
 
-// Pin for ambient light sensor
+// Pin for ambient light sensor (define only if LDR exists!)
 #define LDR_PIN      34
 
 // Size of the display
 #define LF_ROWS      13
 #define LF_COLS      13
 #define NUM_LEDS     LF_ROWS * LF_COLS
+
+// Orientation of the display
+#define ORIENTATION  0    // sets the rotation of the display (0-3)
 
 // Type declarations
 typedef unsigned char byte;
@@ -50,7 +55,15 @@ static rgb_pixel_t frame[LF_ROWS * LF_COLS];
 static CRGB leds[NUM_LEDS];
 
 // Macro to transform x/y coordinates into an index in the the frame array
-#define _src(x, y) ((y) * LF_COLS + (x))
+#if ORIENTATION == 0
+  #define _src(x, y) ((y) * LF_COLS + (x))
+#elif ORIENTATION == 1
+  #define _src(x, y) ((x) * LF_ROWS + (y))
+#elif ORIENTATION == 2
+  #define _src(x, y) ((y) * LF_COLS + (x))
+#elif ORIENTATION == 3
+  #define _src(x, y) ((y) * LF_COLS + (x))
+#endif
 
 // Macro to transform x/y coordinates into an index in the leds array
 #define _tgt(x, y) (((y) % 2) ? ((y + 1) * LF_COLS - (x + 1)) : ((y) * LF_COLS + (x)))
@@ -124,14 +137,6 @@ void lf_push_to_strip() {
 }
 
 
-bool lf_animation_choice_switch_pressed() {
-  return digitalRead(SWITCH_1_PIN) == HIGH;
-}
-
-bool lf_function_switch_1_pressed() {
-   return digitalRead(SWITCH_2_PIN) == HIGH;
-}
-
 
 #define ANIMATION_FUNCTION_COUNT 3
 
@@ -143,7 +148,7 @@ extern lf_animation_t lava_animation;
 extern lf_animation_t fire_animation;
 //extern lf_animation_t plasma_animation;
 extern lf_animation_t circle_animation;
-//extern lf_animation_t test_animation;
+extern lf_animation_t test_animation;
 
 
 /**
@@ -151,12 +156,13 @@ extern lf_animation_t circle_animation;
  */
 static void register_animations() {
    int idx = 0;
-
+   
+   animations[idx++]     = test_animation;
    animations[idx++]     = lava_animation;
    animations[idx++]     = fire_animation;
    //animations[idx++]   = plasma_animation;
    animations[idx++]     = circle_animation;
-   //animations[idx++]     = test_animation;
+  
 
    // Add more animations here. Increase ANIMATION_FUNCTION_COUNT
    // accordingly. Otherwise the functions will not be called
@@ -176,9 +182,12 @@ void setup() {
 
     setup_trace();
 
-    pinMode(SWITCH_1_PIN, INPUT_PULLDOWN);
-    pinMode(SWITCH_2_PIN, INPUT_PULLDOWN);
-    pinMode(LDR_PIN, INPUT_PULLDOWN);
+    pinMode(BUTTON_1_PIN, INPUT_PULLDOWN);
+    pinMode(BUTTON_2_PIN, INPUT_PULLDOWN);
+    
+    #ifdef LDR_PIN
+      pinMode(LDR_PIN, INPUT_PULLDOWN);
+    #endif
 
      adjust_global_brightness();
 
@@ -195,6 +204,8 @@ static int loop_count = 0;
 // index of the current animation
 static int animation_index = 0;
 
+
+
 /**
  * Main loop.
  */
@@ -209,11 +220,16 @@ void loop() {
 
     int last_animation_index = animation_index;
 
-    if (lf_animation_choice_switch_pressed()) {
-        // force next animation
-        animation_index++; 
-        while(lf_animation_choice_switch_pressed()) {delay(10);}
-    } else if (ret_val == LF_ANIMATION_CONTINUE) {
+    lf_update_buttons();
+
+    if (lf_button_1_was_pressed == true && lf_button_1_is_pressed == false) { // button 1 press done
+      if (lf_button_1_pressed_time < 1000) { // was short press
+         // force next animation
+         animation_index++; 
+      }
+    }
+
+    if (ret_val == LF_ANIMATION_CONTINUE) {
         // sleep as requested by the animation
         delay(delay_in_msec);
     } else if (ret_val == LF_ANIMATION_DONE) {
@@ -240,10 +256,17 @@ void loop() {
 static int actual_Brightness = MAX_BRIGHTNESS;
 
 void adjust_global_brightness () {
+
+  #ifdef LDR_PIN
     const int minSensor = 2100;  // sensor value when totally dark (0 to 4096)
     const int maxSensor = 3500;  // sensor value when totally bright (0 to 4096)
     int lightValue = analogRead(LDR_PIN); 
     int targetBrightness =  min(MAX_BRIGHTNESS,max(MIN_BRIGHTNESS,((lightValue-maxSensor) * MAX_BRIGHTNESS) / (maxSensor-minSensor))); 
     actual_Brightness = actual_Brightness + (targetBrightness - actual_Brightness) / 3;
-    FastLED.setBrightness(actual_Brightness);   // set master brightness control
+    FastLED.setBrightness(actual_Brightness);  // set master brightness control
+  #else
+    FastLED.setBrightness(MAX_BRIGHTNESS);   // set master brightness control
+  #endif
+  
+    
 } 

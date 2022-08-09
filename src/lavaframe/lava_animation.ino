@@ -69,9 +69,10 @@ int loop_lava_animation(int *delay_in_msec) {
 
     *delay_in_msec = 30;
 
-     if (lf_function_switch_1_pressed()) {
-      while (lf_function_switch_1_pressed())  { delay(10); }
-      lava_animation_next_scene();
+    if (lf_button_2_was_pressed == true && lf_button_2_is_pressed == false) { // button 2 press done
+      if (lf_button_2_pressed_time < 1000) { // was short press
+          lava_animation_next_scene();
+      }
     }
 
     // clear field
