@@ -35,7 +35,7 @@
 #define NUM_LEDS     LF_ROWS * LF_COLS
 
 // Orientation of the display
-#define ORIENTATION  0    // sets the rotation of the display (0-3)
+#define ORIENTATION  0  // sets the rotation of the display (0-3)
 
 // Type declarations
 typedef unsigned char byte;
@@ -55,15 +55,7 @@ static rgb_pixel_t frame[LF_ROWS * LF_COLS];
 static CRGB leds[NUM_LEDS];
 
 // Macro to transform x/y coordinates into an index in the the frame array
-#if ORIENTATION == 0
-  #define _src(x, y) ((y) * LF_COLS + (x))
-#elif ORIENTATION == 1
-  #define _src(x, y) ((x) * LF_ROWS + (y))
-#elif ORIENTATION == 2
-  #define _src(x, y) ((y) * LF_COLS + (x))
-#elif ORIENTATION == 3
-  #define _src(x, y) ((y) * LF_COLS + (x))
-#endif
+#define _src(x, y) ((y) * LF_COLS + (x))
 
 // Macro to transform x/y coordinates into an index in the leds array
 #define _tgt(x, y) (((y) % 2) ? ((y + 1) * LF_COLS - (x + 1)) : ((y) * LF_COLS + (x)))
@@ -78,8 +70,7 @@ static CRGB leds[NUM_LEDS];
             } while (0)
 
 // Macro to get the RGB value of a pixel
-#define lf_get_pixel(x, y) \
-            (&frame[_src((x), (y))])
+#define lf_get_pixel(x, y) (&frame[_src((x), (y))])
 
 // Debug function to dump the contents of the current frame
 #ifdef DEBUG_OUTPUT
@@ -87,7 +78,7 @@ void lf_dump() {
     char buffer[50];
     for (int y = 0; y < LF_ROWS; y++) {
         for (int x = 0; x < LF_COLS; x++) {
-            rgb_pixel_t *pxl = lf_get_pixel(x, y);
+            rgb_pixel_t *pxl = lf_get_pixel(x, y);  
             sprintf(buffer, "[%d, %d] -> #%02x%02x%02x", x, y, pxl->r, pxl->g, pxl->b);
             tracenl(buffer);
         }
@@ -129,7 +120,17 @@ void lf_fill(byte r, byte g, byte b) {
 void lf_push_to_strip() {
     for (int y = 0; y < LF_ROWS; y++) {
         for (int x = 0; x < LF_COLS; x++) {
-            rgb_pixel_t *p = lf_get_pixel(x, y);
+
+            #if ORIENTATION == 0
+              rgb_pixel_t *p = lf_get_pixel(x, y);  
+            #elif ORIENTATION == 1
+              rgb_pixel_t *p = lf_get_pixel(y, LF_COLS - 1 - x);  
+            #elif ORIENTATION == 2
+              rgb_pixel_t *p = lf_get_pixel(LF_ROWS - 1 - x, LF_COLS - 1 - y);  
+            #elif ORIENTATION == 3
+              rgb_pixel_t *p = lf_get_pixel(LF_ROWS - 1 - y, x);  
+            #endif
+            
             leds[_tgt(x, y)] = CRGB(p->r, p->g, p->b);
         }
     }
@@ -157,7 +158,7 @@ extern lf_animation_t test_animation;
 static void register_animations() {
    int idx = 0;
    
-   animations[idx++]     = test_animation;
+   //animations[idx++]     = test_animation;
    animations[idx++]     = lava_animation;
    animations[idx++]     = fire_animation;
    //animations[idx++]   = plasma_animation;
