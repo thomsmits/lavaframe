@@ -18,7 +18,6 @@ double bubbles_animation_bubble_speed[bubbles_animation_bubbles];         // bub
 
 double bubbles_animation_bubble_size;
 
-//int bubbles_animation_field[LF_COLS][LF_ROWS];
 rgb_pixel_t bubbles_animation_palette[bubbles_animation_bubbles];
 
 void setup_bubbles_animation() {
@@ -31,30 +30,16 @@ void bubbles_animation_next_scene() {
   bubbles_animation_scene++;
   
   switch (bubbles_animation_scene) {
-  /*  case 2:
-      bubbles_animation_palette = {{0, 255, 0}, {0, 64, 0}, {128, 0, 128}, {255, 0,0}, {64, 0, 0}, {0, 0, 255}}; 
-      bubbles_animation_bubble_size = 0.35;
-      break;
-       
-    case 3:
-	  bubbles_animation_palette = {{0, 255, 0}, {0, 64, 0}, {128, 0, 128}, {255, 0,0}, {64, 0, 0}, {0, 0, 255}}; 
-      bubbles_animation_bubble_size = 0.35;
-      break;
-
-    case 4:
-      bubbles_animation_palette = {{0, 255, 0}, {0, 64, 0}, {128, 0, 128}, {255, 0,0}, {64, 0, 0}, {0, 0, 255}}; 
-      bubbles_animation_bubble_size = 0.35;
-      break;*/
 
     case 2:
       for (int i=0; i < 12; i++) {
-        bubbles_animation_palette[i] = (rgb_pixel_t){255 - i * 10, 0, 255 - i * 10};
+        bubbles_animation_palette[i] = (rgb_pixel_t){255 - i * 10, 0, 255 - i * 10}; // purple
       }
       bubbles_animation_bubble_size = 0.2;
       break; 
      
     default:
-	    bubbles_animation_palette[0] = (rgb_pixel_t){0, 255, 0};
+	    bubbles_animation_palette[0] = (rgb_pixel_t){0, 255, 0};  // rainbow
       bubbles_animation_palette[1] = (rgb_pixel_t){0, 64, 0};
       bubbles_animation_palette[2] = (rgb_pixel_t){128, 0, 128};
       bubbles_animation_palette[3] = (rgb_pixel_t){255, 0,0};
@@ -79,16 +64,13 @@ void bubbles_animation_next_scene() {
     bubbles_animation_bubble_speed[i] = 0.1 + i / 30.0;
     bubbles_animation_bubble_radius[i] = (int)(2 + (i * bubbles_animation_bubble_size / 3.0));
   }
-
-
 }
 
 int loop_bubbles_animation(int *delay_in_msec) {
 
     *delay_in_msec = 30;
 
-    // clear field
-    lf_clear();
+    lf_clear();    // clear field
     
     // draw bubbles
     for (int i=bubbles_animation_bubbles-1; i >=0; i--) {
@@ -106,7 +88,7 @@ int loop_bubbles_animation(int *delay_in_msec) {
       }
   }
 
-   return LF_ANIMATION_CONTINUE;
+  return LF_ANIMATION_CONTINUE;
 }
 
 void bubbles_calc_bubble(int i) {
