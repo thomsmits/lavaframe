@@ -156,6 +156,10 @@ int loop_circle_animation_1(int *delay_in_msec) {
     }
     *delay_in_msec = 500;
 
+    if (lf_next_animation_requested() == true) {
+        return LF_ANIMATION_DONE;
+    }
+
     return LF_ANIMATION_CONTINUE;
 }
 
@@ -198,6 +202,10 @@ int loop_circle_animation_2(int *delay_in_msec) {
     
     *delay_in_msec = 10;
 
+    if (lf_next_animation_requested() == true) {
+        return LF_ANIMATION_DONE;
+    }
+
     return LF_ANIMATION_CONTINUE;
 }
 
@@ -237,9 +245,12 @@ int loop_circle_animation_3(int *delay_in_msec) {
       x_pos += v_x;
       y_pos += v_y;
     }
-
     
     *delay_in_msec = 5;
+
+    if (lf_next_animation_requested() == true) {
+        return LF_ANIMATION_DONE;
+    }
 
     return LF_ANIMATION_CONTINUE;
 }

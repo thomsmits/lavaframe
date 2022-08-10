@@ -78,12 +78,6 @@ int loop_bubbles_animation(int *delay_in_msec) {
 
     *delay_in_msec = 30;
 
-    if (lf_button_2_was_pressed == true && lf_button_2_is_pressed == false) { // button 2 press done
-      if (lf_button_2_pressed_time < 1000) { // was short press
-          bubbles_animation_next_scene();
-      }
-    }
-
     // clear field
     lf_clear();
     
@@ -93,9 +87,14 @@ int loop_bubbles_animation(int *delay_in_msec) {
       bubbles_draw_bubble(i);
     }
 
-   // bubbles_animation_field_to_leds();
+    lf_push_to_strip();
 
-   lf_push_to_strip();
+    if (lf_next_animation_requested() == true) {
+      bubbles_animation_next_scene();
+      if (bubbles_animation_scene == 1) {
+        return LF_ANIMATION_DONE;
+      }
+  }
 
    return LF_ANIMATION_CONTINUE;
 }

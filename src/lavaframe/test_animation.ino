@@ -46,5 +46,9 @@ int loop_test_animation(int *delay_in_msec) {
 
     *delay_in_msec = 100;
 
+     if (lf_next_animation_requested() == true) {
+        return LF_ANIMATION_DONE;
+    }
+
     return LF_ANIMATION_CONTINUE;
 }

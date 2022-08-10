@@ -29,10 +29,8 @@ void setup_fire_animation() {
 
 int loop_fire_animation(int *delay_in_msec) {
 
-  if (lf_button_2_was_pressed == true && lf_button_2_is_pressed == false) { // button 2 press done
-      if (lf_button_2_pressed_time < 1000) { // was short press
-          fire_animation_next_scene();
-      }
+    if (lf_buttons_animation_interaction_pressed == true) {
+      // fire_animation_next_scene();
     }
         
     fire_animation_calc_emitter();
@@ -40,6 +38,13 @@ int loop_fire_animation(int *delay_in_msec) {
     fire_animation_fire_to_leds();
 
     *delay_in_msec = 30;
+
+    if (lf_next_animation_requested() == true) {
+      fire_animation_next_scene();
+      if (fire_animation_scene == 1) {
+        return LF_ANIMATION_DONE;
+      }
+    }
 
     return LF_ANIMATION_CONTINUE;
 }

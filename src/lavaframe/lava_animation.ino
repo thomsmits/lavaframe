@@ -28,17 +28,17 @@ void setup_lava_animation() {
 }
 
 void lava_animation_next_scene() {
-  
+
   lava_animation_scene++;
-  
+
   switch (lava_animation_scene) {
     case 2:
-       lava_animation_setup_palette({0, 255, 0}, {0, 64, 0}, {128, 0, 128}); // green, purple background
-       lava_animation_bubble_size = 0.35;
-       break;
-       
+      lava_animation_setup_palette({0, 255, 0}, {0, 64, 0}, {128, 0, 128}); // green, purple background
+      lava_animation_bubble_size = 0.35;
+      break;
+
     case 3:
-      lava_animation_setup_palette({255, 0,0}, {64, 0, 0}, {0, 0, 0}); // red
+      lava_animation_setup_palette({255, 0, 0}, {64, 0, 0}, {0, 0, 0}); // red
       lava_animation_bubble_size = 0.35;
       break;
 
@@ -46,18 +46,18 @@ void lava_animation_next_scene() {
       lava_animation_setup_palette({255, 255, 255}, {0, 0, 0}, {0, 0, 64}); // white, blue background
       lava_animation_bubble_size = 0.4;
       break;
-     
+
     default:
-      lava_animation_setup_palette({255, 0,255}, {0, 0, 255}, {0, 0, 0}); // purple, blue border
+      lava_animation_setup_palette({255, 0, 255}, {0, 0, 255}, {0, 0, 0}); // purple, blue border
       lava_animation_bubble_size = 0.55;
       lava_animation_scene = 1;
-      break; 
+      break;
   }
 
   int border = 3;
 
-  for (int i=0; i < lava_animation_bubbles; i++) {
-    lava_animation_bubble_x[i] = border + (((LF_COLS -2 -border*2) * i )/ lava_animation_bubbles ) ;
+  for (int i = 0; i < lava_animation_bubbles; i++) {
+    lava_animation_bubble_x[i] = border + (((LF_COLS - 2 - border * 2) * i ) / lava_animation_bubbles ) ;
     lava_animation_bubble_y[i] = (i * 3) % LF_ROWS;
     lava_animation_bubble_direction_x[i] = 0; //random(1,2);
     lava_animation_bubble_direction_y[i] = 0.01 + i / 200.0;
@@ -67,45 +67,50 @@ void lava_animation_next_scene() {
 
 int loop_lava_animation(int *delay_in_msec) {
 
-    *delay_in_msec = 30;
+  *delay_in_msec = 30;
 
-    if (lf_button_2_was_pressed == true && lf_button_2_is_pressed == false) { // button 2 press done
-      if (lf_button_2_pressed_time < 1000) { // was short press
-          lava_animation_next_scene();
-      }
+  if (lf_buttons_animation_interaction_pressed == true) {
+    // lava_animation_next_scene();
+  }
+
+  // clear field
+  for (int x = 0; x < LF_COLS; x++) {
+    for (int y = 0; y < LF_ROWS; y++) {
+      lava_animation_field[x][y] = 0;
     }
+  }
 
-    // clear field
-    for (int x = 0; x < LF_COLS; x++) {
-      for (int y = 0; y < LF_ROWS; y++) {
-        lava_animation_field[x][y] = 0;
-      } 
+  // draw bubbles
+  for (int i = 0; i < lava_animation_bubbles; i++) {
+    calc_bubble(i);
+    draw_bubble(i);
+  }
+
+  lava_animation_field_to_leds();
+
+  if (lf_next_animation_requested() == true) {
+    lava_animation_next_scene();
+    if (lava_animation_scene == 1) {
+      return LF_ANIMATION_DONE;
     }
+  }
 
-   // draw bubbles
-   for (int i=0; i < lava_animation_bubbles; i++) {
-      calc_bubble(i);
-      draw_bubble(i);
-   }
-
-   lava_animation_field_to_leds();
-
-   return LF_ANIMATION_CONTINUE;
+  return LF_ANIMATION_CONTINUE;
 }
 
 void calc_bubble(int i) {
 
-    lava_animation_bubble_y[i] += lava_animation_bubble_direction_y[i];
-    
-    if (lava_animation_bubble_y[i] < 1) {
-       lava_animation_bubble_direction_y[i] = -lava_animation_bubble_direction_y[i];
-       lava_animation_bubble_y[i] = 1;
-    }       
-    
-    if (lava_animation_bubble_y[i] >= LF_ROWS-1 ) {
-       lava_animation_bubble_direction_y[i] = -lava_animation_bubble_direction_y[i];
-       lava_animation_bubble_y[i] = LF_ROWS-1;
-    }       
+  lava_animation_bubble_y[i] += lava_animation_bubble_direction_y[i];
+
+  if (lava_animation_bubble_y[i] < 1) {
+    lava_animation_bubble_direction_y[i] = -lava_animation_bubble_direction_y[i];
+    lava_animation_bubble_y[i] = 1;
+  }
+
+  if (lava_animation_bubble_y[i] >= LF_ROWS - 1 ) {
+    lava_animation_bubble_direction_y[i] = -lava_animation_bubble_direction_y[i];
+    lava_animation_bubble_y[i] = LF_ROWS - 1;
+  }
 }
 
 void draw_bubble(int i) {
@@ -120,26 +125,26 @@ void draw_bubble(int i) {
       int col = 0;
       if (radius > dist)  {
         col = 255;
-      } else{
-        col = int(255 - (dist * 0.9 -radius) * 255);  
+      } else {
+        col = int(255 - (dist * 0.9 - radius) * 255);
       }
       lava_animation_field[x][y] = max(lava_animation_field[x][y], min(255, col));
-    }  
+    }
   }
 }
 
 void lava_animation_setup_palette(rgb_pixel_t color_lava, rgb_pixel_t color_border, rgb_pixel_t color_background)
 {
-    for (int i = 0; i <= 128; i++)
-    {
-        lava_animation_palette[255-i].r = lava_animation_col_interpolate(color_lava.r, color_border.r, 128, i); 
-        lava_animation_palette[255-i].g = lava_animation_col_interpolate(color_lava.g, color_border.g, 128, i); 
-        lava_animation_palette[255-i].b = lava_animation_col_interpolate(color_lava.b, color_border.b, 128, i); 
+  for (int i = 0; i <= 128; i++)
+  {
+    lava_animation_palette[255 - i].r = lava_animation_col_interpolate(color_lava.r, color_border.r, 128, i);
+    lava_animation_palette[255 - i].g = lava_animation_col_interpolate(color_lava.g, color_border.g, 128, i);
+    lava_animation_palette[255 - i].b = lava_animation_col_interpolate(color_lava.b, color_border.b, 128, i);
 
-        lava_animation_palette[128-i].r = lava_animation_col_interpolate(color_border.r, color_background.r, 128, i); 
-        lava_animation_palette[128-i].g = lava_animation_col_interpolate(color_border.g, color_background.g, 128, i); 
-        lava_animation_palette[128-i].b = lava_animation_col_interpolate(color_border.b, color_background.b, 128, i); 
-    }
+    lava_animation_palette[128 - i].r = lava_animation_col_interpolate(color_border.r, color_background.r, 128, i);
+    lava_animation_palette[128 - i].g = lava_animation_col_interpolate(color_border.g, color_background.g, 128, i);
+    lava_animation_palette[128 - i].b = lava_animation_col_interpolate(color_border.b, color_background.b, 128, i);
+  }
 }
 
 byte lava_animation_col_interpolate(byte startValue, byte endValue, int steps, int pos) {
@@ -156,7 +161,7 @@ void lava_animation_field_to_leds()
       px->r = color.r;
       px->g = color.g;
       px->b = color.b;
-    } 
+    }
   }
   lf_push_to_strip();
 }
