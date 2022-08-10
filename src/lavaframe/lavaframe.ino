@@ -37,7 +37,7 @@
 #define LDR_PIN      34
 
 // time between animations when in slideshow mode (in seconds)
-#define SLIDESHOW_DELAY 3
+#define SLIDESHOW_DELAY 120  // 2 minutes
 
 // Type declarations
 typedef unsigned char byte;
