@@ -139,12 +139,13 @@ void lf_push_to_strip() {
 
 
 
-#define ANIMATION_FUNCTION_COUNT 3
+#define ANIMATION_FUNCTION_COUNT 4
 
 // Array of the animation functions
 lf_animation_t animations[ANIMATION_FUNCTION_COUNT];
 
 // Animations
+extern lf_animation_t bubbles_animation;
 extern lf_animation_t lava_animation;
 extern lf_animation_t fire_animation;
 //extern lf_animation_t plasma_animation;
@@ -159,6 +160,7 @@ static void register_animations() {
    int idx = 0;
    
    //animations[idx++]     = test_animation;
+   animations[idx++]     = bubbles_animation;
    animations[idx++]     = lava_animation;
    animations[idx++]     = fire_animation;
    //animations[idx++]   = plasma_animation;
