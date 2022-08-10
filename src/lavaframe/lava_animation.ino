@@ -63,6 +63,8 @@ void lava_animation_next_scene() {
     lava_animation_bubble_direction_y[i] = 0.01 + i / 200.0;
     lava_animation_bubble_radius[i] = (int)(1 + (i * lava_animation_bubble_size));
   }
+
+  
 }
 
 int loop_lava_animation(int *delay_in_msec) {
@@ -89,6 +91,7 @@ int loop_lava_animation(int *delay_in_msec) {
   lava_animation_field_to_leds();
 
   if (lf_next_animation_requested() == true) {
+    lf_reset_next_animation_request();
     lava_animation_next_scene();
     if (lava_animation_scene == 1) {
       return LF_ANIMATION_DONE;

@@ -16,10 +16,8 @@ int loop_plasma_animation(int *delay_in_msec) {
   *delay_in_msec = 30;
 
   if (lf_next_animation_requested() == true) {
-    lava_animation_next_scene();
-    if (lava_animation_scene == 1) {
-      return LF_ANIMATION_DONE;
-    }
+    lf_reset_next_animation_request();
+    return LF_ANIMATION_DONE;
   }
 
   return LF_ANIMATION_CONTINUE;

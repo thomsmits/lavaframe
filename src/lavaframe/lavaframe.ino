@@ -27,7 +27,7 @@
 #define NUM_LEDS     LF_ROWS * LF_COLS
 
 // Orientation of the display
-#define ORIENTATION  0  // sets the rotation of the display (0-3)
+#define ORIENTATION  2  // sets the rotation of the display (0-3)
 
 // Pins for the buttons
 #define BUTTON_1_PIN  27   // short press: next animation; hold: switch between automatic animation slideshow and a single static animation
@@ -56,16 +56,21 @@ static unsigned long lf_slideshow_last_action;
 // find out, if it is time for the next animation. 
 // however, the decision should be made in animation when it is a good moment to change and not be forced.
 static bool lf_next_animation_requested() {
-  if (lf_buttons_next_animation_requested == true) {
-    lf_slideshow_mode = false; // turn of slideshow mode when changed animation manual
+  if (lf_buttons_next_animation_requested == true)  {
     return true;
   }
   if (lf_slideshow_mode == true && millis() - lf_slideshow_last_action > SLIDESHOW_DELAY * 1000) {
-    lf_slideshow_last_action = millis();
+    lf_reset_next_animation_request();
     return true;
   }
   return false;
 }
+
+static bool lf_reset_next_animation_request() {
+  lf_slideshow_last_action = millis();
+}
+
+
 
 // Internal representation of the pixels
 static rgb_pixel_t frame[LF_ROWS * LF_COLS];
@@ -221,7 +226,7 @@ void setup() {
         animations[i].setup_f();
     }
 
-    lf_slideshow_last_action = millis();
+    lf_reset_next_animation_request();
 }
 
 // Counter for the loops
@@ -267,7 +272,7 @@ void loop() {
           animation_index = 1; // not 0 to skip the intro animation
       }
       animations[animation_index].reset_f();
-      lf_slideshow_last_action = millis();
+      lf_reset_next_animation_request();
     }
 
     loop_count++; // wrap around is intended!
@@ -275,10 +280,45 @@ void loop() {
 
 
 void change_slideshow_mode () {
-    lf_clear();  // clear neopixel field
-    lf_push_to_strip();
+    
     lf_slideshow_mode = !lf_slideshow_mode;
-    lf_slideshow_last_action = millis();
+
+    int borderX = LF_COLS * 0.25;
+    int borderY = LF_ROWS * 0.25;
+
+    for (int i = 0; i < 3; i++) { // blink 3 times
+      
+        lf_clear();  
+        if (lf_slideshow_mode == true) {
+          // green triangle
+          for (int x = 0; x < LF_COLS - 2 * borderX; x++) {
+            int heightDiv2 = max(1, (int)(x * 0.75));
+            for (int y = -heightDiv2; y < heightDiv2-1 ; y++) {  
+               rgb_pixel_t *pxl = lf_get_pixel(LF_COLS - x - borderX, LF_ROWS / 2 + y);  
+               pxl->r = 0;
+               pxl->g = 255;
+               pxl->b = 0;
+            }
+          }
+        } else {
+          // red square
+          for (int x = borderX; x < LF_COLS - borderX; x++) {
+            for (int y = borderY; y < LF_ROWS - borderY; y++) {  
+               rgb_pixel_t *pxl = lf_get_pixel(x, y);  
+               pxl->r = 255;
+               pxl->g = 0;
+               pxl->b = 0;
+            }
+          }
+        }
+        lf_push_to_strip();
+        delay(300);
+
+        lf_clear();  // clear neopixel field
+        lf_push_to_strip();
+        delay(200);
+    }
+    lf_reset_next_animation_request();
 } 
 
 

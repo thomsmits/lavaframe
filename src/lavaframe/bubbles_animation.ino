@@ -45,6 +45,13 @@ void bubbles_animation_next_scene() {
       bubbles_animation_palette = {{0, 255, 0}, {0, 64, 0}, {128, 0, 128}, {255, 0,0}, {64, 0, 0}, {0, 0, 255}}; 
       bubbles_animation_bubble_size = 0.35;
       break;*/
+
+    case 2:
+      for (int i=0; i < 12; i++) {
+        bubbles_animation_palette[i] = (rgb_pixel_t){255 - i * 10, 0, 255 - i * 10};
+      }
+      bubbles_animation_bubble_size = 0.2;
+      break; 
      
     default:
 	    bubbles_animation_palette[0] = (rgb_pixel_t){0, 255, 0};
@@ -72,6 +79,8 @@ void bubbles_animation_next_scene() {
     bubbles_animation_bubble_speed[i] = 0.1 + i / 30.0;
     bubbles_animation_bubble_radius[i] = (int)(2 + (i * bubbles_animation_bubble_size / 3.0));
   }
+
+
 }
 
 int loop_bubbles_animation(int *delay_in_msec) {
@@ -90,6 +99,7 @@ int loop_bubbles_animation(int *delay_in_msec) {
     lf_push_to_strip();
 
     if (lf_next_animation_requested() == true) {
+      lf_reset_next_animation_request();
       bubbles_animation_next_scene();
       if (bubbles_animation_scene == 1) {
         return LF_ANIMATION_DONE;
@@ -125,7 +135,7 @@ void bubbles_draw_bubble(int i) {
         color.g = byte(color.g * factor);
         color.b = byte(color.b * factor);
       }
-      rgb_pixel_t *px = lf_get_pixel(x, y);
+      rgb_pixel_t *px = lf_get_pixel(x, LF_ROWS - 1 - y);
       if (px->r + px->g + px->b < color.r + color.g + color.b) {
         px->r = color.r;
         px->g = color.g;

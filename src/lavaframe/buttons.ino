@@ -47,23 +47,25 @@ void lf_update_buttons() {
 
 void lf_update_interactions() {
 
-    lf_buttons_next_animation_requested = 
+  const int hold_ms = 700;
+
+  lf_buttons_next_animation_requested = 
 		lf_button_1_was_pressed == true && 
 		lf_button_1_is_pressed == false && 
-		lf_button_1_pressed_time < 1000; // short press button 1
+		lf_button_1_pressed_time < hold_ms; // short press button 1
 		
 	lf_buttons_slideshow_mode_is_hold = 
 		lf_button_1_was_pressed == true && 
 		lf_button_1_is_pressed == true && 
-		lf_button_1_pressed_time > 1000; // hold button 1
+		lf_button_1_pressed_time > hold_ms; // hold button 1
 		
 	lf_buttons_animation_interaction_pressed =  
 		lf_button_2_was_pressed == true && 
 		lf_button_2_is_pressed == false && 
-		lf_button_2_pressed_time < 1000; // short press button 2
+		lf_button_2_pressed_time < hold_ms; // short press button 2
 
 	lf_buttons_max_brightness_is_hold = 
 		lf_button_2_was_pressed == true && 
 		lf_button_2_is_pressed == true && 
-		lf_button_2_pressed_time > 1000; // hold button 2
+		lf_button_2_pressed_time > hold_ms; // hold button 2
 }

@@ -40,6 +40,7 @@ int loop_fire_animation(int *delay_in_msec) {
     *delay_in_msec = 30;
 
     if (lf_next_animation_requested() == true) {
+      lf_reset_next_animation_request();
       fire_animation_next_scene();
       if (fire_animation_scene == 1) {
         return LF_ANIMATION_DONE;
@@ -97,6 +98,8 @@ void fire_animation_next_scene() {
       fire_animation_field[x][y] = 0;
     } 
   }
+
+
 }
 
 
@@ -190,7 +193,7 @@ void fire_animation_fire_to_leds()
 {
   for (int x = 0; x < LF_COLS; x++) {
     for (int y = 0; y < LF_ROWS; y++) {
-      byte value = fire_animation_field[x][y];
+      byte value = fire_animation_field[x][LF_ROWS-1-y];
       rgb_pixel_t color = fire_animation_palette[value];
       rgb_pixel_t *px = lf_get_pixel(x, y);
       px->r = color.r;
