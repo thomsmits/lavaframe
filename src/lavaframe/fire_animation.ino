@@ -243,8 +243,8 @@ void fire_animation_setup_palette_blue()
         fire_animation_palette[i+128].g = (byte)(i * 4);
         fire_animation_palette[i+128].b = (byte)(255);
 
-        fire_animation_palette[i+192].r = (byte)(255 - i * 4);
-        fire_animation_palette[i+192].g = (byte)(255 - i * 4);
-        fire_animation_palette[i+192].b = (byte)(255 - i * 4);
+        fire_animation_palette[i+192].r = (byte)(255);
+        fire_animation_palette[i+192].g = (byte)(255);
+        fire_animation_palette[i+192].b = (byte)(255);
     }    
 }
