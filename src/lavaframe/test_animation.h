@@ -5,17 +5,26 @@
 #include "animation.h"
 #include "hardware.h"
 
+/**
+ * Test animation, simply turning one pixel after the other on and off.
+ */
 class TestAnimation : public Animation {
-  
+
   public:
-  
-    TestAnimation() {      
+
+    /** Create a new instance. */
+    TestAnimation() {
     }
-    
+
+    /** @see Animation::animation(int) */
     virtual int animation(int*);
+
+    /** @see Animation::setup() */
     virtual void setup();
-    virtual void reset(); 
-    
+
+    /** @see Animation::reset() */
+    virtual void reset();
+
   private:
 
 };

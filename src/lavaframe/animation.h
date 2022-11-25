@@ -1,5 +1,6 @@
 /*
- * 
+ * Base interface and definitions for all animations running
+ * on the lava frame.
  */
 #ifndef animation_h
 #define animation_h
@@ -15,16 +16,16 @@
  * Base class (interface) for all animations.
  */
 class Animation {
-  
+
   public:
 
     /**
      * Setup the animation.
      */
     virtual void setup() = 0;
-    
+
     /**
-     * Run the animation. 
+     * Run the animation.
      * @param (out) delay_in_msecs time the animation wants the external
      *              loop to delay
      * @return instructs the outer program what to do next

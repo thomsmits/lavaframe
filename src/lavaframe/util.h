@@ -8,7 +8,7 @@
 /**
  * Convert an HSV value to an RGB value and write it directly into the
  * given pixe.
- *  
+ *
  * @param h hue
  * @param s saturation
  * @param v brightness
@@ -18,7 +18,7 @@ void lf_hsv_to_rgb(byte h, byte s, byte v, rgb_pixel_t* rgb);
 
 /**
  * Convert an RGB value to HSV values.
- * 
+ *
  * @param rgb the RGB pixel
  * @param (out) h hue
  * @param (out) s saturation
@@ -33,18 +33,18 @@ void lf_rgb_to_hsv(rgb_pixel_t* rgb, byte* h, byte* s, byte* v);
 
 /**
  * Draw a solid circle with one color.
- * 
+ *
  * @param center_x center of the circle (x coordinate)
  * @param center_y center of the circle (y coordinate)
  * @param radius radius of the circle
  * @param blend_colors if set to true, pixels will be mixed otherwise overwritten
  * @param color the color to be used for filling the circle
  */
-void lf_draw_solid_circle(int center_x, int center_y, int radius, bool blend_colors, rgb_pixel_t color); 
+void lf_draw_solid_circle(int center_x, int center_y, int radius, bool blend_colors, rgb_pixel_t color);
 
 /**
  * Draw a circle with concentric colors.
- * 
+ *
  * @param center_x center of the circle (x coordinate)
  * @param center_y center of the circle (y coordinate)
  * @param radius radius of the circle
