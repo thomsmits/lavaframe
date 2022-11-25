@@ -10,16 +10,16 @@
 
 class PlasmaAnimation : public Animation {
 
-  #define dist(x1, y1, x2, y2) sqrt(double((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)))
+    #define dist(x1, y1, x2, y2) sqrt(double((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)))
 
-  int scene;
+    int scene;
 
-  double sinFactor1;
-  double sinFactor2;
-  double sinFactor3;
-  double sinFactor4;
+    double sinFactor1;
+    double sinFactor2;
+    double sinFactor3;
+    double sinFactor4;
 
-  double slowDownFactor;
+    double slowDownFactor;
 
 
 public:

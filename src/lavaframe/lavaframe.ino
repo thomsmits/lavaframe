@@ -35,7 +35,8 @@ Frame lavaFrame;
  * Setup routine.
  */
 void setup() {
-    // Add all animations you want to show here
+    // Add all animations you want to show here.
+    // See animation.h on how to write an animation.
     lavaFrame.register_animation(new IntroAnimation);
     lavaFrame.register_animation(new LavaAnimation);
     lavaFrame.register_animation(new FireAnimation);
@@ -46,7 +47,7 @@ void setup() {
 
     // Add more animations here. See MAX_ANIMATIONS in frame.h for the maximum number
     // ...
-   
+
     lavaFrame.setup();
 }
 

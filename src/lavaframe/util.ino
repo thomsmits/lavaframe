@@ -1,7 +1,3 @@
-/**
- * Utility functions for the lava frame
- */
-
 #include "util.h"
 
 void lf_hsv_to_rgb(byte h, byte s, byte v, rgb_pixel_t* rgb) {
@@ -51,8 +47,7 @@ void lf_rgb_to_hsv(rgb_pixel_t* rgb, byte* h, byte* s, byte* v) {
     rgb_max = rgb->r > rgb->g ? (rgb->r > rgb->b ? rgb->r : rgb->b) : (rgb->g > rgb->b ? rgb->g : rgb->b);
 
     *v = rgb_max;
-    if (*v == 0)
-    {
+    if (*v == 0) {
         *h = 0;
         *s = 0;
         return;

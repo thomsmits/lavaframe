@@ -1,7 +1,6 @@
 /**
  * Utility functions for the lava frame
  */
-
 #ifndef util_h
 #define util_h
 

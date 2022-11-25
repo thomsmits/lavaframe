@@ -1,21 +1,9 @@
 #include "frame.h"
 
-
-/**
- * Clear the current frame and initialize it with pure black
- * #000000
- */
 void Frame::clear() {
     memset(frame, 0, sizeof(rgb_pixel_t) * LF_ROWS * LF_COLS);
 }
 
-/**
- * Fill the whole frame with a given color.
- *
- * @param r red value
- * @param g green value
- * @param b blue value
- */
 void Frame::fill(byte r, byte g, byte b) {
     for (int y = 0; y < LF_ROWS; y++) {
         for (int x = 0; x < LF_COLS; x++) {
@@ -27,9 +15,6 @@ void Frame::fill(byte r, byte g, byte b) {
     }
 }
 
-/**
- * Pushes the internal representation to the strip.
- */
 void Frame::push_to_strip() {
     for (int y = 0; y < LF_ROWS; y++) {
         for (int x = 0; x < LF_COLS; x++) {
@@ -49,7 +34,6 @@ void Frame::push_to_strip() {
     }
     FastLED.show();
 }
-
 
 void Frame::setup() {
 
@@ -85,10 +69,10 @@ void Frame::loop() {
     buttons.update();
 
     if (buttons.slideshow_mode_is_hold == true) {
-      change_slideshow_mode();
-      while(buttons.slideshow_mode_is_hold == true) {
-          buttons.update();
-      }
+        change_slideshow_mode();
+        while(buttons.slideshow_mode_is_hold == true) {
+            buttons.update();
+        }
     }
 
     EVERY_N_MILLISECONDS( 500 ) { adjust_global_brightness(); }
@@ -104,12 +88,12 @@ void Frame::loop() {
     }
 
     if (last_animation_index != animation_index) {
-      if (animation_index >= registered_animations_count) {
-          // All animations done, start from beginning
-          animation_index = 1; // not 0 to skip the intro animation
-      }
-      animations[animation_index]->reset();
-      reset_next_animation_request();
+        if (animation_index >= registered_animations_count) {
+            // All animations done, start from beginning
+            animation_index = 1; // not 0 to skip the intro animation
+        }
+        animations[animation_index]->reset();
+        reset_next_animation_request();
     }
 
     loop_count++; // wrap around is intended!
@@ -129,7 +113,7 @@ bool Frame::next_animation_requested() {
     return false;
 }
 
-bool Frame::reset_next_animation_request() {
+void Frame::reset_next_animation_request() {
     slideshow_last_action = millis();
 }
 

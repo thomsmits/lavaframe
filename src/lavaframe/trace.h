@@ -1,7 +1,6 @@
 /*
  * Debugging and tracing functions.
-*/
-
+ */
 #ifndef trace_h
 #define trace_h
 

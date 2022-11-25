@@ -12,7 +12,7 @@
 // Macro to transform x/y coordinates into an index in the leds array
 #define _tgt(x, y) (((y) % 2) ? ((y + 1) * LF_COLS - (x + 1)) : ((y) * LF_COLS + (x)))
 
-// Maxium number of animations the frame can handle
+// Maximum number of animations the frame can handle
 #define MAX_ANIMATIONS 255
 
 // time between animations when in slideshow mode (in seconds)
@@ -23,13 +23,13 @@
  */
 class Frame {
   private:
-  
+
     // Counter for the loops
     int loop_count = 0;
 
     // index of the current animation
     int animation_index = 0;
-    
+
     // Brightness adjustment
     int actual_Brightness = MAX_BRIGHTNESS;
 
@@ -38,7 +38,7 @@ class Frame {
 
     // Number of known animations
     int registered_animations_count = 0;
-    
+
     // Array of the animation functions
     Animation* animations[MAX_ANIMATIONS];
 
@@ -53,19 +53,93 @@ class Frame {
     rgb_pixel_t frame[LF_ROWS * LF_COLS];
 
   public:
-    void setup();
-    void loop();
-    void push_to_strip();
-    void clear();
-    void fill(byte r, byte g, byte b);
-    bool next_animation_requested();
-    bool reset_next_animation_request();
-    void change_slideshow_mode();
-    void adjust_global_brightness();
-    void dump();
-    void set_pixel(int x, int y, byte _r, byte _g, byte _b);
-    rgb_pixel_t* get_pixel(int x, int y) { return &frame[_src(x, y)]; }
+    /**
+     * Register an animation with the frame. This method must be called
+     * directly after constructing the object BEFORE all other methods.
+     *
+     * @param animation the animation to be registered.
+     */
     void register_animation(Animation* animation);
+
+    /**
+     * Setup the frame. This method must be called AFTER register_animation
+     * but before all other methods.
+     */
+    void setup();
+
+    /**
+     * This method has to be periodically called to drive the animation.
+     */
+    void loop();
+
+    /**
+     * Sends all changes to the strip.
+     */
+    void push_to_strip();
+
+    /**
+     * Clears the display.
+     */
+    void clear();
+
+    /**
+     * Fills the whole display with the given color.
+     *
+     * @param r red component of the color
+     * @param g green component of the color
+     * @param b blue component of the color
+     */
+    void fill(byte r, byte g, byte b);
+
+    /**
+     * Tells the animation to shut down gracefully because
+     * the user has requested a change in animation.
+     *
+     * @return true if a shutdown was requested
+     * @return false animation can continue
+     */
+    bool next_animation_requested();
+
+    /**
+     * Reset the flag checked by next_animation_requested()
+     */
+    void reset_next_animation_request();
+
+    /**
+     * Change the slideshow mode.
+     */
+    void change_slideshow_mode();
+
+    /**
+     * Call this method periodically to adjust the brightness
+     * depending on the ambient light sensor if present.
+     */
+    void adjust_global_brightness();
+
+    /**
+     * Dump the state of the display (for debugging purposes).
+     */
+    void dump();
+
+    /**
+     * Set a given pixel.
+     *
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @param r red component of the color
+     * @param g green component of the color
+     * @param b blue component of the color
+     */
+    void set_pixel(int x, int y, byte r, byte g, byte b);
+
+    /**
+     * Get a pointer to the pixel object at the given coordinate.
+     *
+     * @param x x-coordinate
+     * @param y y-coordinate
+     * @return pointer to the pixel
+     */
+    rgb_pixel_t* get_pixel(int x, int y) { return &frame[_src(x, y)]; }
 };
 
 #endif

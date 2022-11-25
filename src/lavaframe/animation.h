@@ -1,6 +1,9 @@
 /*
  * Base interface and definitions for all animations running
  * on the lava frame.
+ *
+ * If you want your own animation, create a subclass of Animation
+ * and register an instance of it in the lavaframe.ino main class.
  */
 #ifndef animation_h
 #define animation_h

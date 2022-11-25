@@ -7,6 +7,7 @@ void FireAnimation::setup() {
 }
 
 void FireAnimation::reset() {
+    setup();
 }
 
 PostAnimationAction FireAnimation::animation(int *delay_in_msec) {
@@ -203,7 +204,7 @@ void FireAnimation::setup_palette_blue() {
         palette[i].g = (byte)(0);
         palette[i].b = (byte)(i * 4);
 
-        palette[i+64].r = (byte)(255 -  i*4);
+        palette[i+64].r = (byte)(255 - i*4);
         palette[i+64].g = (byte)(0);
         palette[i+64].b = (byte)(255);
 
