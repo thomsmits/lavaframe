@@ -5,17 +5,22 @@
  *
  * Main file.
  */
- 
+
 #include <FastLED.h>
 #include "types.h"
 #include "buttons.h"
+#include "hardware.h"
 
 #define DEBUG_OUTPUT
 #include "trace.h"
 #include "animation.h"
 #include "intro_animation.h"
+#include "lava_animation.h"
+#include "fire_animation.h"
+#include "test_animation.h"
+#include "bubbles_animation.h"
+#include "circle_animation.h"
 #include "plasma_animation.h"
-
 
 // Settings for the FastLED library
 #define LED_TYPE        WS2811
@@ -23,28 +28,8 @@
 #define MIN_BRIGHTNESS  32  // 0 to 255
 #define MAX_BRIGHTNESS  128 // 0 to 255
 
-// Data pin for neopixel stripe
-#define DATA_PIN     15
-
-// Size of the display
-#define LF_ROWS      13
-#define LF_COLS      13
-#define NUM_LEDS     LF_ROWS * LF_COLS
-
-// Orientation of the display
-#define ORIENTATION  2  // sets the rotation of the display (0-3)
-
-// Pins for the buttons
-#define BUTTON_1_PIN  27   // short press: next animation; hold: switch between automatic animation slideshow and a single static animation
-#define BUTTON_2_PIN  26   // short press: interaction with actual animation; hold: adjust maximum brightness
-
-// Pin for ambient light sensor (define only if LDR exists!)
-#define LDR_PIN      34
-
 // time between animations when in slideshow mode (in seconds)
 #define SLIDESHOW_DELAY 120  // 2 minutes
-
-
 
 static bool lf_slideshow_mode = true;
 static unsigned long lf_slideshow_last_action;
@@ -165,15 +150,6 @@ void lf_push_to_strip() {
 // Array of the animation functions
 Animation* animations[MAX_ANIMATIONS];
 
-// Animations
-//extern lf_animation_t intro_animation;
-extern lf_animation_t bubbles_animation;
-extern lf_animation_t lava_animation;
-extern lf_animation_t fire_animation;
-//extern lf_animation_t plasma_animation;
-extern lf_animation_t circle_animation;
-extern lf_animation_t test_animation;
-
 int registered_animations_count = 0;
 
 /**
@@ -182,9 +158,14 @@ int registered_animations_count = 0;
 static void register_animations() {
 
 
-  // animations[registered_animations_count++]     = new IntroAnimation;
+   animations[registered_animations_count++]     = new IntroAnimation;
+   animations[registered_animations_count++]     = new LavaAnimation;
+   animations[registered_animations_count++]     = new FireAnimation;
+   animations[registered_animations_count++]     = new TestAnimation;
+   animations[registered_animations_count++]     = new BubblesAnimation;
+   animations[registered_animations_count++]     = new CircleAnimation;
    animations[registered_animations_count++]     = new PlasmaAnimation;
-   
+
    /*
    //animations[registered_animations_count++]   = test_animation;
    animations[registered_animations_count++]     = lava_animation;
