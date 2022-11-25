@@ -53,7 +53,7 @@ int BubblesAnimation::animation(int *delay_in_msec) {
 
     *delay_in_msec = 30;
 
-    lf_clear();    // clear field
+    lavaFrame.clear();    // clear field
 
     // draw bubbles
     for (int i=bubbles-1; i >=0; i--) {
@@ -61,10 +61,10 @@ int BubblesAnimation::animation(int *delay_in_msec) {
       draw_bubble(i);
     }
 
-    lf_push_to_strip();
+    lavaFrame.push_to_strip();
 
-    if (lf_next_animation_requested() == true) {
-      lf_reset_next_animation_request();
+    if (lavaFrame.next_animation_requested() == true) {
+      lavaFrame.reset_next_animation_request();
       next_scene();
       if (scene == 1) {
         return LF_ANIMATION_DONE;
@@ -100,7 +100,7 @@ void BubblesAnimation::draw_bubble(int i) {
         color.g = byte(color.g * factor);
         color.b = byte(color.b * factor);
       }
-      rgb_pixel_t *px = lf_get_pixel(x, LF_ROWS - 1 - y);
+      rgb_pixel_t *px = lavaFrame.get_pixel(x, LF_ROWS - 1 - y);
       if (px->r + px->g + px->b < color.r + color.g + color.b) {
         px->r = color.r;
         px->g = color.g;

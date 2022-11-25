@@ -71,8 +71,8 @@ int LavaAnimation::animation(int *delay_in_msec) {
 
     field_to_leds();
 
-    if (lf_next_animation_requested() == true) {
-        lf_reset_next_animation_request();
+    if (lavaFrame.next_animation_requested() == true) {
+        lavaFrame.reset_next_animation_request();
         next_scene();
         if (scene == 1) {
             return LF_ANIMATION_DONE;
@@ -139,11 +139,11 @@ void LavaAnimation::field_to_leds() {
         for (int y = 0; y < LF_ROWS; y++) {
             byte value = field[x][y];
             rgb_pixel_t color = palette[value];
-            rgb_pixel_t *px = lf_get_pixel(x, y);
+            rgb_pixel_t *px = lavaFrame.get_pixel(x, y);
             px->r = color.r;
             px->g = color.g;
             px->b = color.b;
         }
     }
-    lf_push_to_strip();
+    lavaFrame.push_to_strip();
 }

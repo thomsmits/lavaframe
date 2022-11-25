@@ -8,7 +8,7 @@ void IntroAnimation::reset() {
 
 int IntroAnimation::animation(int *delay_in_msec) {
 
-    lf_clear();
+    lavaFrame.clear();
 
     const double targetHeight = 0.8 * LF_ROWS;
     static double actualHeight = -2;
@@ -39,11 +39,11 @@ int IntroAnimation::animation(int *delay_in_msec) {
         return LF_ANIMATION_DONE;
     }
 
-    lf_push_to_strip();
+    lavaFrame.push_to_strip();
 
     *delay_in_msec = 10;
 
-    if (lf_next_animation_requested() == true) {
+    if (lavaFrame.next_animation_requested() == true) {
         return LF_ANIMATION_DONE;
     }
 
@@ -67,7 +67,7 @@ void IntroAnimation::draw_point(double b_x, double b_y, rgb_pixel_t *color) {
                 col.g = byte(col.g * factor);
                 col.b = byte(col.b * factor);
             }
-            rgb_pixel_t *px = lf_get_pixel(x, y);
+            rgb_pixel_t *px = lavaFrame.get_pixel(x, y);
             if (px->r + px->g + px->b < col.r + col.g + col.b) {
                 px->r = col.r;
                 px->g = col.g;

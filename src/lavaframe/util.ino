@@ -14,7 +14,7 @@ void lf_hsv_to_rgb(byte h, byte s, byte v, rgb_pixel_t* rgb) {
     }
 
     int region = h / 43;
-    int remainder = (h - (region * 43)) * 6; 
+    int remainder = (h - (region * 43)) * 6;
 
     int p = (v * (255 - s)) >> 8;
     int q = (v * (255 - (s * remainder) >> 8)) >> 8;
@@ -44,7 +44,7 @@ void lf_hsv_to_rgb(byte h, byte s, byte v, rgb_pixel_t* rgb) {
 }
 
 void lf_rgb_to_hsv(rgb_pixel_t* rgb, byte* h, byte* s, byte* v) {
-    
+
     byte rgb_min, rgb_max;
 
     rgb_min = rgb->r < rgb->g ? (rgb->r < rgb->b ? rgb->r : rgb->b) : (rgb->g < rgb->b ? rgb->g : rgb->b);
@@ -74,13 +74,13 @@ void lf_rgb_to_hsv(rgb_pixel_t* rgb, byte* h, byte* s, byte* v) {
     }
 }
 
-// Prototype declaration as workaround for IDE bug. 
+// Prototype declaration as workaround for IDE bug.
 // See: https://forum.arduino.cc/t/is-this-a-compiler-bug-typedefd-function-pointer-used-as-parameter-type-fails/325357/2
 //void lf_draw_circle(int center_x, int center_y, int radius, lf_color_circle_function_t fn);
 
 /**
  * Draw a solid circle with one color.
- * 
+ *
  * @param center_x center of the circle (x coordinate)
  * @param center_y center of the circle (y coordinate)
  * @param radius radius of the circle
@@ -88,18 +88,18 @@ void lf_rgb_to_hsv(rgb_pixel_t* rgb, byte* h, byte* s, byte* v) {
  * @param color the color to be used for filling the circle
  */
 void lf_draw_solid_circle(int center_x, int center_y, int radius, bool blend_colors, rgb_pixel_t color) {
- 
+
     for (int y = -radius; y <= radius; y++) {
         for (int x = -radius; x <= radius; x++) {
             if (x * x + y * y <= radius * radius) {
 
                 int x_pos = center_x + x;
                 int y_pos = center_y + y;
-                
+
                 // Allow for offscreen coordinates
                 if ((x_pos < LF_COLS) && (y_pos < LF_ROWS)) {
-                                    
-                    rgb_pixel_t *px = lf_get_pixel(x_pos, y_pos);
+
+                    rgb_pixel_t *px = lavaFrame.get_pixel(x_pos, y_pos);
 
                     if (blend_colors) {
                         px->r = (px->r + color.r) / 2;
@@ -120,7 +120,7 @@ void lf_draw_solid_circle(int center_x, int center_y, int radius, bool blend_col
 
 /**
  * Draw a circle with concentric colors.
- * 
+ *
  * @param center_x center of the circle (x coordinate)
  * @param center_y center of the circle (y coordinate)
  * @param radius radius of the circle
@@ -129,14 +129,14 @@ void lf_draw_solid_circle(int center_x, int center_y, int radius, bool blend_col
  * @param num_colors size of the colors array
  */
 void lf_draw_striped_circle(int center_x, int center_y, int radius, bool blend_colors, rgb_pixel_t* colors, int num_colors) {
-  
+
   for (int y = -radius; y <= radius; y++) {
         for (int x = -radius; x <= radius; x++) {
             if (x * x + y * y <= radius * radius) {
-              
+
                 int x_pos = center_x + x;
                 int y_pos = center_y + y;
-                
+
                 // Allow for offscreen coordinates
                 if ((x_pos < LF_COLS) && (y_pos  < LF_ROWS)) {
 
@@ -146,8 +146,8 @@ void lf_draw_striped_circle(int center_x, int center_y, int radius, bool blend_c
                     if ((color_idx < 0) ||(color_idx >= num_colors)) {
                       color_idx = 0;
                     }
-                    
-                    rgb_pixel_t *px = lf_get_pixel(x_pos, y_pos);
+
+                    rgb_pixel_t *px = lavaFrame.get_pixel(x_pos, y_pos);
 
                     if (blend_colors) {
                         px->r = (px->r + colors[color_idx].r) / 2;

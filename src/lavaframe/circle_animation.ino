@@ -46,12 +46,12 @@ int CircleAnimation::animation(int *delay_in_msec) {
     const int max_radius = LF_COLS / 2 + 1;
 
     if (first_run) {
-        lf_clear();
+        lavaFrame.clear();
         first_run = false;
     }
 
     lf_draw_striped_circle(start_x, start_y, r, true, (colors + color_offset), sizeof(colors) - color_offset);
-    lf_push_to_strip();
+    lavaFrame.push_to_strip();
 
     r++;
 
@@ -61,7 +61,7 @@ int CircleAnimation::animation(int *delay_in_msec) {
     }
     *delay_in_msec = 500;
 
-    if (lf_next_animation_requested() == true) {
+    if (lavaFrame.next_animation_requested() == true) {
         return LF_ANIMATION_DONE;
     }
 
@@ -76,12 +76,12 @@ int CircleAnimation::animation_2(int *delay_in_msec) {
     static float v_x = 0.5;
     static float v_y = 1.0;
 
-    lf_clear();
+    lavaFrame.clear();
 
     rgb_pixel_t color = { 255, 255, 255 };
 
     lf_draw_solid_circle(x_pos, y_pos, radius, false, color);
-    lf_push_to_strip();
+    lavaFrame.push_to_strip();
 
     x_pos += v_x;
     y_pos += v_y;
@@ -101,7 +101,7 @@ int CircleAnimation::animation_2(int *delay_in_msec) {
 
     *delay_in_msec = 10;
 
-    if (lf_next_animation_requested() == true) {
+    if (lavaFrame.next_animation_requested() == true) {
         return LF_ANIMATION_DONE;
     }
 
@@ -115,14 +115,14 @@ int CircleAnimation::animation_3(int *delay_in_msec) {
     static float v_x = 0.5;
     static float v_y = 1.0;
 
-    lf_clear();
+    lavaFrame.clear();
 
-    rgb_pixel_t *px = lf_get_pixel((int) x_pos, (int) y_pos);
+    rgb_pixel_t *px = lavaFrame.get_pixel((int) x_pos, (int) y_pos);
     px->r = 255;
     px->g = 255;
     px->b = 255;
 
-    lf_push_to_strip();
+    lavaFrame.push_to_strip();
 
     x_pos += v_x;
     y_pos += v_y;
@@ -141,7 +141,7 @@ int CircleAnimation::animation_3(int *delay_in_msec) {
 
     *delay_in_msec = 5;
 
-    if (lf_next_animation_requested() == true) {
+    if (lavaFrame.next_animation_requested() == true) {
         return LF_ANIMATION_DONE;
     }
 

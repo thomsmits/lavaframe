@@ -23,18 +23,18 @@ int TestAnimation::animation(int *delay_in_msec) {
 
     x++;
 
-    rgb_pixel_t *px = lf_get_pixel(x, y);
+    rgb_pixel_t *px = lavaFrame.get_pixel(x, y);
     px->r = 100;
     px->g = 100;
     px->b = 100;
-    lf_push_to_strip();
+    lavaFrame.push_to_strip();
 
-    lf_clear();
+    lavaFrame.clear();
 
     *delay_in_msec = 100;
 
-     if (lf_next_animation_requested() == true) {
-        lf_reset_next_animation_request();
+     if (lavaFrame.next_animation_requested() == true) {
+        lavaFrame.reset_next_animation_request();
         return LF_ANIMATION_DONE;
     }
 

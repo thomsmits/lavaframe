@@ -19,4 +19,8 @@
 // Pin for ambient light sensor (define only if LDR exists!)
 #define LDR_PIN      34
 
+// Settings for the FastLED library
+#define LED_TYPE        WS2811
+#define COLOR_ORDER     GRB
+
 #endif
