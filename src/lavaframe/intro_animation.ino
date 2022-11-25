@@ -1,24 +1,25 @@
 #include "animation.h"
+#include "intro_animation.h"
 
+/*
 // This animation
 lf_animation_t intro_animation = {
   setup_intro_animation,
   setup_intro_animation,
   loop_intro_animation,
 };
+*/
 
-const int intro_animation_points = 40;  // how many moving points?
-rgb_pixel_t intro_animation_palette[] = { (rgb_pixel_t){255,0,255},
-                                          (rgb_pixel_t){186,85,211},
-                                          (rgb_pixel_t){255,20,147},
-                                          (rgb_pixel_t){0,191,255},
-                                          (rgb_pixel_t){255,182,193}};
 
 /**
  * Setup the animation.
  */
-void setup_intro_animation() {
+void IntroAnimation::setup() {
 }
+
+void IntroAnimation::reset() {
+}
+
 
 /**
  * Function called in a loop.
@@ -26,7 +27,7 @@ void setup_intro_animation() {
  * @param (out) delay_in_msec the delay requested by the function
  * @return constant requesting the next action of the loop
  */
-int loop_intro_animation(int *delay_in_msec) {
+int IntroAnimation::animation(int *delay_in_msec) {
 
     lf_clear();
 
@@ -41,7 +42,7 @@ int loop_intro_animation(int *delay_in_msec) {
       double x = LF_COLS / 2;
       double y = actualHeight += LF_ROWS * 0.05;
       for (int i=0; i < intro_animation_points; i++) {
-        intro_draw_point(x, y, &intro_animation_palette[i % (sizeof(intro_animation_palette))]);
+        draw_point(x, y, &intro_animation_palette[i % (sizeof(intro_animation_palette))]);
       }
       
     } else if (explosion++ <= explosionLength * 1.2) {
@@ -52,7 +53,7 @@ int loop_intro_animation(int *delay_in_msec) {
           double radius = LF_COLS / explosionLength * explosion  + i * 0.1;
           double x = LF_COLS / 2 + radius * sin(angle);
           double y = actualHeight + radius * cos(angle);
-          intro_draw_point(x, y, &intro_animation_palette[i % (sizeof(intro_animation_palette))]);
+          draw_point(x, y, &intro_animation_palette[i % (sizeof(intro_animation_palette))]);
         }
                 
     } else {
@@ -72,7 +73,7 @@ int loop_intro_animation(int *delay_in_msec) {
 
 
 
-void intro_draw_point(double b_x, double b_y, rgb_pixel_t *color) {
+void IntroAnimation::draw_point(double b_x, double b_y, rgb_pixel_t *color) {
 
   double radius = 1.5; //max(LF_COLS / 7.0, LF_ROWS / 7.0);
 

@@ -9,6 +9,14 @@
 // Animation is finished, it does not want to be called again
 #define LF_ANIMATION_DONE      2
 
+class Animation {
+  public:
+    virtual int animation(int*) = 0;
+    virtual void setup() = 0;
+    virtual void reset() = 0;
+};
+
+
 typedef int  (*lf_animation_function_t)(int*);
 typedef void (*lf_setup_function_t)(void);
 typedef void (*lf_reset_function_t)(void);

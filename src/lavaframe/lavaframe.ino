@@ -5,12 +5,15 @@
  *
  * Main file.
  */
+ 
 #include <FastLED.h>
+#include "types.h"
 #include "buttons.h"
 
 #define DEBUG_OUTPUT
 #include "trace.h"
 #include "animation.h"
+#include "intro_animation.h"
 
 // Settings for the FastLED library
 #define LED_TYPE        WS2811
@@ -39,21 +42,12 @@
 // time between animations when in slideshow mode (in seconds)
 #define SLIDESHOW_DELAY 120  // 2 minutes
 
-// Type declarations
-typedef unsigned char byte;
-
-// A single pixel
-typedef struct {
-    byte r;
-    byte g;
-    byte b;
-} rgb_pixel_t;
 
 
 static bool lf_slideshow_mode = true;
 static unsigned long lf_slideshow_last_action;
 
-// find out, if it is time for the next animation. 
+// find out, if it is time for the next animation.
 // however, the decision should be made in animation when it is a good moment to change and not be forced.
 static bool lf_next_animation_requested() {
   if (lf_buttons_next_animation_requested == true)  {
@@ -102,7 +96,7 @@ void lf_dump() {
     char buffer[50];
     for (int y = 0; y < LF_ROWS; y++) {
         for (int x = 0; x < LF_COLS; x++) {
-            rgb_pixel_t *pxl = lf_get_pixel(x, y);  
+            rgb_pixel_t *pxl = lf_get_pixel(x, y);
             sprintf(buffer, "[%d, %d] -> #%02x%02x%02x", x, y, pxl->r, pxl->g, pxl->b);
             tracenl(buffer);
         }
@@ -113,7 +107,7 @@ void lf_dump() {
 #endif
 
 /**
- * Clear the current frame and intialize it with pure black
+ * Clear the current frame and initialize it with pure black
  * #000000
  */
 void lf_clear() {
@@ -146,15 +140,15 @@ void lf_push_to_strip() {
         for (int x = 0; x < LF_COLS; x++) {
 
             #if ORIENTATION == 0
-              rgb_pixel_t *p = lf_get_pixel(x, y);  
+              rgb_pixel_t *p = lf_get_pixel(x, y);
             #elif ORIENTATION == 1
-              rgb_pixel_t *p = lf_get_pixel(y, LF_COLS - 1 - x);  
+              rgb_pixel_t *p = lf_get_pixel(y, LF_COLS - 1 - x);
             #elif ORIENTATION == 2
-              rgb_pixel_t *p = lf_get_pixel(LF_ROWS - 1 - x, LF_COLS - 1 - y);  
+              rgb_pixel_t *p = lf_get_pixel(LF_ROWS - 1 - x, LF_COLS - 1 - y);
             #elif ORIENTATION == 3
-              rgb_pixel_t *p = lf_get_pixel(LF_ROWS - 1 - y, x);  
+              rgb_pixel_t *p = lf_get_pixel(LF_ROWS - 1 - y, x);
             #endif
-            
+
             leds[_tgt(x, y)] = CRGB(p->r, p->g, p->b);
         }
     }
@@ -164,13 +158,13 @@ void lf_push_to_strip() {
 
 
 
-#define MAX_ANIMATIONS 5
+#define MAX_ANIMATIONS 20  // Max number of animations the frame can handle
 
 // Array of the animation functions
-lf_animation_t animations[MAX_ANIMATIONS];
+Animation* animations[MAX_ANIMATIONS];
 
 // Animations
-extern lf_animation_t intro_animation;
+//extern lf_animation_t intro_animation;
 extern lf_animation_t bubbles_animation;
 extern lf_animation_t lava_animation;
 extern lf_animation_t fire_animation;
@@ -185,17 +179,19 @@ int registered_animations_count = 0;
  */
 static void register_animations() {
 
-   animations[registered_animations_count++]     = intro_animation;
+
+   animations[registered_animations_count++]     = new IntroAnimation;
+   ;
+   /*
    //animations[registered_animations_count++]   = test_animation;
    animations[registered_animations_count++]     = lava_animation;
    animations[registered_animations_count++]     = bubbles_animation;
    animations[registered_animations_count++]     = fire_animation;
    //animations[registered_animations_count++]   = plasma_animation;
    //animations[registered_animations_count++]   = circle_animation;
-  
+*/
    // Add more animations here. Increase MAX_ANIMATIONS
-   // accordingly. Otherwise the functions will not be called
-   // and the arrays overflow
+   // accordingly if you exceed the number of slots in the array.
    // ...
 }
 
@@ -214,7 +210,7 @@ void setup() {
 
     pinMode(BUTTON_1_PIN, INPUT_PULLDOWN);
     pinMode(BUTTON_2_PIN, INPUT_PULLDOWN);
-    
+
     #ifdef LDR_PIN
       pinMode(LDR_PIN, INPUT_PULLDOWN);
     #endif
@@ -223,7 +219,7 @@ void setup() {
 
     // Initialize the animations
     for (int i = 0; i < registered_animations_count; i++) {
-        animations[i].setup_f();
+        animations[i]->setup();
     }
 
     lf_reset_next_animation_request();
@@ -243,7 +239,7 @@ void loop() {
     int delay_in_msec = 0;
 
     // Call the current animation function
-    int ret_val = animations[animation_index].animation_f(&delay_in_msec);
+    int ret_val = animations[animation_index]->animation(&delay_in_msec);
 
     lf_update_buttons();
 
@@ -271,7 +267,7 @@ void loop() {
           // All animations done, start from beginning
           animation_index = 1; // not 0 to skip the intro animation
       }
-      animations[animation_index].reset_f();
+      animations[animation_index]->reset();
       lf_reset_next_animation_request();
     }
 
@@ -280,21 +276,21 @@ void loop() {
 
 
 void change_slideshow_mode () {
-    
+
     lf_slideshow_mode = !lf_slideshow_mode;
 
     int borderX = LF_COLS * 0.25;
     int borderY = LF_ROWS * 0.25;
 
     for (int i = 0; i < 3; i++) { // blink 3 times
-      
-        lf_clear();  
+
+        lf_clear();
         if (lf_slideshow_mode == true) {
           // green triangle
           for (int x = 0; x < LF_COLS - 2 * borderX; x++) {
             int heightDiv2 = max(1, (int)(x * 0.75));
-            for (int y = -heightDiv2; y < heightDiv2-1 ; y++) {  
-               rgb_pixel_t *pxl = lf_get_pixel(LF_COLS - x - borderX, LF_ROWS / 2 + y);  
+            for (int y = -heightDiv2; y < heightDiv2-1 ; y++) {
+               rgb_pixel_t *pxl = lf_get_pixel(LF_COLS - x - borderX, LF_ROWS / 2 + y);
                pxl->r = 0;
                pxl->g = 255;
                pxl->b = 0;
@@ -303,8 +299,8 @@ void change_slideshow_mode () {
         } else {
           // red square
           for (int x = borderX; x < LF_COLS - borderX; x++) {
-            for (int y = borderY; y < LF_ROWS - borderY; y++) {  
-               rgb_pixel_t *pxl = lf_get_pixel(x, y);  
+            for (int y = borderY; y < LF_ROWS - borderY; y++) {
+               rgb_pixel_t *pxl = lf_get_pixel(x, y);
                pxl->r = 255;
                pxl->g = 0;
                pxl->b = 0;
@@ -319,7 +315,7 @@ void change_slideshow_mode () {
         delay(200);
     }
     lf_reset_next_animation_request();
-} 
+}
 
 
 /**
@@ -333,12 +329,12 @@ void adjust_global_brightness () {
   #ifdef LDR_PIN
     const int minSensor = 2100;  // sensor value when totally dark (0 to 4096)
     const int maxSensor = 3500;  // sensor value when totally bright (0 to 4096)
-    int lightValue = analogRead(LDR_PIN); 
-    int targetBrightness =  min(MAX_BRIGHTNESS,max(MIN_BRIGHTNESS,((lightValue-maxSensor) * MAX_BRIGHTNESS) / (maxSensor-minSensor))); 
+    int lightValue = analogRead(LDR_PIN);
+    int targetBrightness =  min(MAX_BRIGHTNESS,max(MIN_BRIGHTNESS,((lightValue-maxSensor) * MAX_BRIGHTNESS) / (maxSensor-minSensor)));
     actual_Brightness = actual_Brightness + (targetBrightness - actual_Brightness) / 3;
     FastLED.setBrightness(actual_Brightness);  // set master brightness control
   #else
     FastLED.setBrightness(MAX_BRIGHTNESS);   // set master brightness control
   #endif
-   
-} 
+
+}
