@@ -92,8 +92,8 @@ class Frame {
     void fill(byte r, byte g, byte b);
 
     /**
-     * Tells the animation to shut down gracefully because
-     * the user has requested a change in animation.
+     * Find out, if it is time for the next animation.
+     * The decision should be made in animation when it is a good moment to change and not be forced.
      *
      * @return true if a shutdown was requested
      * @return false animation can continue
@@ -109,12 +109,6 @@ class Frame {
      * Change the slideshow mode.
      */
     void change_slideshow_mode();
-
-    /**
-     * Call this method periodically to adjust the brightness
-     * depending on the ambient light sensor if present.
-     */
-    void adjust_global_brightness();
 
     /**
      * Dump the state of the display (for debugging purposes).
@@ -140,6 +134,14 @@ class Frame {
      * @return pointer to the pixel
      */
     rgb_pixel_t* get_pixel(int x, int y) { return &frame[_src(x, y)]; }
+
+  private:
+
+    /**
+     * This method is periodically called to adjust the brightness
+     * depending on the ambient light sensor if present.
+     */
+    void adjust_global_brightness();
 };
 
 #endif

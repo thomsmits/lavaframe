@@ -99,9 +99,6 @@ void Frame::loop() {
     loop_count++; // wrap around is intended!
 }
 
-
-// find out, if it is time for the next animation.
-// however, the decision should be made in animation when it is a good moment to change and not be forced.
 bool Frame::next_animation_requested() {
     if (buttons.next_animation_requested == true)  {
         return true;
@@ -116,7 +113,6 @@ bool Frame::next_animation_requested() {
 void Frame::reset_next_animation_request() {
     slideshow_last_action = millis();
 }
-
 
 void Frame::change_slideshow_mode () {
 
