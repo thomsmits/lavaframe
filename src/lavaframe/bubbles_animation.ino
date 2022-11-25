@@ -1,89 +1,73 @@
-#include "animation.h"
+#include "bubbles_animation.h"
 
-lf_animation_t bubbles_animation = {
-  setup_bubbles_animation,
-  setup_bubbles_animation,
-  loop_bubbles_animation
-};
-
-
-const int bubbles_animation_bubbles = 6;    // how many moving bubbles?
-
-int bubbles_animation_scene = 0;
-
-double bubbles_animation_bubble_x[bubbles_animation_bubbles];             // x-position of bubbles
-double bubbles_animation_bubble_y[bubbles_animation_bubbles];             // y-position of bubbles
-int bubbles_animation_bubble_radius[bubbles_animation_bubbles];           // sizes of bubbles
-double bubbles_animation_bubble_speed[bubbles_animation_bubbles];         // bubbles moving in y direction
-
-double bubbles_animation_bubble_size;
-
-rgb_pixel_t bubbles_animation_palette[bubbles_animation_bubbles];
-
-void setup_bubbles_animation() {
-  bubbles_animation_scene = 0;
-  bubbles_animation_next_scene();
+void BubblesAnimation::setup() {
+  scene = 0;
+  next_scene();
 }
 
-void bubbles_animation_next_scene() {
+void BubblesAnimation::reset() {
   
-  bubbles_animation_scene++;
+}
+
+void BubblesAnimation::next_scene() {
   
-  switch (bubbles_animation_scene) {
+  scene++;
+  
+  switch (scene) {
 
     case 2:
       for (int i=0; i < 12; i++) {
-        bubbles_animation_palette[i] = (rgb_pixel_t){255 - i * 10, 0, 255 - i * 10}; // purple
+        palette[i] = (rgb_pixel_t){255 - i * 10, 0, 255 - i * 10}; // purple
       }
-      bubbles_animation_bubble_size = 0.2;
+      bubble_size = 0.2;
       break; 
      
     default:
-	    bubbles_animation_palette[0] = (rgb_pixel_t){0, 255, 0};  // rainbow
-      bubbles_animation_palette[1] = (rgb_pixel_t){0, 64, 0};
-      bubbles_animation_palette[2] = (rgb_pixel_t){128, 0, 128};
-      bubbles_animation_palette[3] = (rgb_pixel_t){255, 0,0};
-      bubbles_animation_palette[4] = (rgb_pixel_t){64, 0, 0};
-      bubbles_animation_palette[5] = (rgb_pixel_t){0, 0, 255};
-      bubbles_animation_palette[6] = (rgb_pixel_t){0, 255, 0};
-      bubbles_animation_palette[7] = (rgb_pixel_t){0, 64, 0};
-      bubbles_animation_palette[8] = (rgb_pixel_t){128, 0, 128};
-      bubbles_animation_palette[9] = (rgb_pixel_t){255, 0,0};
-      bubbles_animation_palette[10] = (rgb_pixel_t){64, 0, 0};
-      bubbles_animation_palette[11] = (rgb_pixel_t){0, 0, 255};
-      bubbles_animation_bubble_size = 0.35;
-      bubbles_animation_scene = 1;
+	    palette[0] = (rgb_pixel_t){0, 255, 0};  // rainbow
+      palette[1] = (rgb_pixel_t){0, 64, 0};
+      palette[2] = (rgb_pixel_t){128, 0, 128};
+      palette[3] = (rgb_pixel_t){255, 0,0};
+      palette[4] = (rgb_pixel_t){64, 0, 0};
+      palette[5] = (rgb_pixel_t){0, 0, 255};
+      palette[6] = (rgb_pixel_t){0, 255, 0};
+      palette[7] = (rgb_pixel_t){0, 64, 0};
+      palette[8] = (rgb_pixel_t){128, 0, 128};
+      palette[9] = (rgb_pixel_t){255, 0,0};
+      palette[10] = (rgb_pixel_t){64, 0, 0};
+      palette[11] = (rgb_pixel_t){0, 0, 255};
+      bubble_size = 0.35;
+      scene = 1;
       break; 
   }
 
   int border = 2;
 
-  for (int i=0; i < bubbles_animation_bubbles; i++) {
-    bubbles_animation_bubble_x[i] = (i*7) % LF_COLS; //border + (((LF_COLS -2 -border*2) * i )/ bubbles_animation_bubbles ) ;
-    bubbles_animation_bubble_y[i] = (i*5) % LF_ROWS; //(i * (LF_ROWS / 4)) % (LF_ROWS);
-    bubbles_animation_bubble_speed[i] = 0.1 + i / 30.0;
-    bubbles_animation_bubble_radius[i] = (int)(2 + (i * bubbles_animation_bubble_size / 3.0));
+  for (int i=0; i < bubbles; i++) {
+    bubble_x[i] = (i*7) % LF_COLS; //border + (((LF_COLS -2 -border*2) * i )/ bubbles ) ;
+    bubble_y[i] = (i*5) % LF_ROWS; //(i * (LF_ROWS / 4)) % (LF_ROWS);
+    bubble_speed[i] = 0.1 + i / 30.0;
+    bubble_radius[i] = (int)(2 + (i * bubble_size / 3.0));
   }
 }
 
-int loop_bubbles_animation(int *delay_in_msec) {
+int BubblesAnimation::animation(int *delay_in_msec) {
 
     *delay_in_msec = 30;
 
     lf_clear();    // clear field
     
     // draw bubbles
-    for (int i=bubbles_animation_bubbles-1; i >=0; i--) {
-      bubbles_calc_bubble(i);
-      bubbles_draw_bubble(i);
+    for (int i=bubbles-1; i >=0; i--) {
+      calc_bubble(i);
+      draw_bubble(i);
     }
 
     lf_push_to_strip();
 
     if (lf_next_animation_requested() == true) {
       lf_reset_next_animation_request();
-      bubbles_animation_next_scene();
-      if (bubbles_animation_scene == 1) {
+      next_scene();
+      if (scene == 1) {
         return LF_ANIMATION_DONE;
       }
   }
@@ -91,26 +75,26 @@ int loop_bubbles_animation(int *delay_in_msec) {
   return LF_ANIMATION_CONTINUE;
 }
 
-void bubbles_calc_bubble(int i) {
+void BubblesAnimation::calc_bubble(int i) {
 
-    bubbles_animation_bubble_y[i] -= bubbles_animation_bubble_speed[i];
+    bubble_y[i] -= bubble_speed[i];
     
-    if (bubbles_animation_bubble_y[i] <= -LF_ROWS - bubbles_animation_bubble_radius[i] * 2 ) {
-      bubbles_animation_bubble_y[i] = LF_ROWS + bubbles_animation_bubble_radius[i] * 2;
+    if (bubble_y[i] <= -LF_ROWS - bubble_radius[i] * 2 ) {
+      bubble_y[i] = LF_ROWS + bubble_radius[i] * 2;
     }       
 }
 
-void bubbles_draw_bubble(int i) {
+void BubblesAnimation::draw_bubble(int i) {
 
-  double b_x = bubbles_animation_bubble_x[i];
-  double b_y = bubbles_animation_bubble_y[i];
-  double radius = bubbles_animation_bubble_radius[i];
+  double b_x = bubble_x[i];
+  double b_y = bubble_y[i];
+  double radius = bubble_radius[i];
 
   for (int x = 0; x < LF_COLS; x++) {
     for (int y = 0; y < LF_ROWS; y++) {
       double dist = sqrt((b_x - x) * (b_x - x) + (b_y - y) * (b_y - y));
       rgb_pixel_t color;
-      color = bubbles_animation_palette[i];
+      color = palette[i];
       if (radius < dist)  {
         double factor = min(1.0, max (0.0, 1 - (dist-radius) / (radius / 2.0)));
         color.r = byte(color.r * factor);
@@ -127,16 +111,16 @@ void bubbles_draw_bubble(int i) {
   }
 }
 
-byte bubbles_animation_col_interpolate(byte startValue, byte endValue, int steps, int pos) {
+byte BubblesAnimation::col_interpolate(byte startValue, byte endValue, int steps, int pos) {
   return (byte)(startValue + ((endValue - startValue) * pos) / steps);
 }
 
-/*void bubbles_animation_field_to_leds()
+/*void field_to_leds()
 {
   for (int x = 0; x < LF_COLS; x++) {
     for (int y = 0; y < LF_ROWS; y++) {
-      byte value = bubbles_animation_field[x][y];
-      rgb_pixel_t color = bubbles_animation_palette[value];
+      byte value = field[x][y];
+      rgb_pixel_t color = palette[value];
       rgb_pixel_t *px = lf_get_pixel(x, y);
       px->r = color.r;
       px->g = color.g;

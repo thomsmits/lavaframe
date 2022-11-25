@@ -1,17 +1,17 @@
-#include "animation.h"
-
-// This animation
-lf_animation_t test_animation = {
-  setup_test_animation,
-  setup_test_animation,
-  loop_test_animation,
-};
+#include "test_animation.h"
 
 /**
  * Setup the animation.
  */
-void setup_test_animation() {
+void TestAnimation::setup() {
 }
+
+/**
+ * Reset the animation.
+ */
+void TestAnimation::reset() {
+}
+
 
 /**
  * Function called in a loop.
@@ -19,7 +19,7 @@ void setup_test_animation() {
  * @param (out) delay_in_msec the delay requested by the function
  * @return constant requesting the next action of the loop
  */
-int loop_test_animation(int *delay_in_msec) {
+int TestAnimation::animation(int *delay_in_msec) {
     static int x = 0;
     static int y = 0;
 

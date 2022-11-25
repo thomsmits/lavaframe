@@ -1,24 +1,17 @@
 #include "animation.h"
 #include "util.h"
 
-// This animation
-lf_animation_t circle_animation = {
-  setup_circle_animation,
-  reset_circle_animation,
-  loop_circle_animation_1
-};
-
 /**
  * Setup the animation.
  */
-void setup_circle_animation() {
+void CircleAnimation::setup() {
 }
 
 
 /**
  * reset the animation.
  */
-void reset_circle_animation() {
+void CircleAnimation::reset() {
 }
 
 
@@ -28,7 +21,7 @@ void reset_circle_animation() {
  * @param (out) delay_in_msec the delay requested by the function
  * @return constant requesting the next action of the loop
  */
-int loop_circle_animation_1(int *delay_in_msec) {
+int CircleAnimation::animation(int *delay_in_msec) {
     static bool first_run = true;
     static int r = 1;
     static int color_offset = 0;
@@ -169,7 +162,7 @@ int loop_circle_animation_1(int *delay_in_msec) {
  * @param (out) delay_in_msec the delay requested by the function
  * @return constant requesting the next action of the loop
  */
-int loop_circle_animation_2(int *delay_in_msec) {
+int CircleAnimation::animation_2(int *delay_in_msec) {
     const int radius = 1;
     static float x_pos = LF_COLS / 2;
     static float y_pos = LF_ROWS / 2;
@@ -215,7 +208,7 @@ int loop_circle_animation_2(int *delay_in_msec) {
  * @param (out) delay_in_msec the delay requested by the function
  * @return constant requesting the next action of the loop
  */
-int loop_circle_animation_3(int *delay_in_msec) {
+int CircleAnimation::animation_3(int *delay_in_msec) {
     static float x_pos = LF_COLS / 2;
     static float y_pos = LF_ROWS / 2;
     
