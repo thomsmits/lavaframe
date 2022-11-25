@@ -33,6 +33,9 @@ class FireAnimation : public Animation {
 
     /** Create a new instance. */
     FireAnimation() {
+        for (int i = 0; i < emitters; i++) {
+            emitter_counter[i] = 0;
+        }
     }
 
     /** @see Animation::animation(int) */
