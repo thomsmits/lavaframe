@@ -103,7 +103,7 @@ bool Frame::next_animation_requested() {
     if (buttons.next_animation_requested == true)  {
         return true;
     }
-    if (slideshow_mode == true && millis() - slideshow_last_action > SLIDESHOW_DELAY * 1000) {
+    if (slideshow_mode == true && (millis() - slideshow_last_action > SLIDESHOW_DELAY * 1000)) {
         reset_next_animation_request();
         return true;
     }
@@ -136,7 +136,7 @@ void Frame::change_slideshow_mode () {
                 }
             }
         } else {
-          // red square
+            // red square
             for (int x = borderX; x < LF_COLS - borderX; x++) {
                 for (int y = borderY; y < LF_ROWS - borderY; y++) {
                     rgb_pixel_t *pxl = get_pixel(x, y);

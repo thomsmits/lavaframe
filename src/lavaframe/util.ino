@@ -73,15 +73,6 @@ void lf_rgb_to_hsv(rgb_pixel_t* rgb, byte* h, byte* s, byte* v) {
 // See: https://forum.arduino.cc/t/is-this-a-compiler-bug-typedefd-function-pointer-used-as-parameter-type-fails/325357/2
 //void lf_draw_circle(int center_x, int center_y, int radius, lf_color_circle_function_t fn);
 
-/**
- * Draw a solid circle with one color.
- *
- * @param center_x center of the circle (x coordinate)
- * @param center_y center of the circle (y coordinate)
- * @param radius radius of the circle
- * @param blend_colors if set to true, pixels will be mixed otherwise overwritten
- * @param color the color to be used for filling the circle
- */
 void lf_draw_solid_circle(int center_x, int center_y, int radius, bool blend_colors, rgb_pixel_t color) {
 
     for (int y = -radius; y <= radius; y++) {
@@ -112,17 +103,6 @@ void lf_draw_solid_circle(int center_x, int center_y, int radius, bool blend_col
     }
 }
 
-
-/**
- * Draw a circle with concentric colors.
- *
- * @param center_x center of the circle (x coordinate)
- * @param center_y center of the circle (y coordinate)
- * @param radius radius of the circle
- * @param blend_colors if set to true, pixels will be mixed otherwise overwritten
- * @param colors the colors to be used for filling the circle
- * @param num_colors size of the colors array
- */
 void lf_draw_striped_circle(int center_x, int center_y, int radius, bool blend_colors, rgb_pixel_t* colors, int num_colors) {
 
   for (int y = -radius; y <= radius; y++) {

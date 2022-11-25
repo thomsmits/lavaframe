@@ -3,8 +3,8 @@
 #include "FastLED.h"
 
 void PlasmaAnimation::setup() {
-  scene = 0;
-  next_scene();
+    scene = 0;
+    next_scene();
 }
 
 void PlasmaAnimation::reset() {
@@ -12,21 +12,20 @@ void PlasmaAnimation::reset() {
 
 PostAnimationAction PlasmaAnimation::animation(int *delay_in_msec) {
 
-  *delay_in_msec = 2;
+    *delay_in_msec = 2;
 
-  if (lavaFrame.next_animation_requested() == true) {
-      lavaFrame.reset_next_animation_request();
-      next_scene();
-      if (scene == 1) {
-        return PostAnimationAction::anim_done;
+    if (lavaFrame.next_animation_requested() == true) {
+        lavaFrame.reset_next_animation_request();
+        next_scene();
+        if (scene == 1) {
+            return PostAnimationAction::anim_done;
+        }
       }
-    }
 
   calc_plasma();
 
   return PostAnimationAction::anim_continue;
 }
-
 
 void PlasmaAnimation::next_scene() {
 
@@ -65,7 +64,6 @@ void PlasmaAnimation::next_scene() {
             break;
     }
 }
-
 
 void PlasmaAnimation::calc_plasma()
 {

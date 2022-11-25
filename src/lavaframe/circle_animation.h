@@ -16,7 +16,7 @@ class CircleAnimation : public Animation {
     CircleAnimation() {
     }
 
-   /** @see Animation::animation(int) */
+    /** @see Animation::animation(int) */
     virtual PostAnimationAction animation(int*);
 
     /** @see Animation::setup() */

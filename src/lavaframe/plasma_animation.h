@@ -21,14 +21,19 @@ class PlasmaAnimation : public Animation {
 
     double slowDownFactor;
 
-
 public:
-    PlasmaAnimation() {
 
+    /** Create a new instance. */
+    PlasmaAnimation() {
     }
 
+    /** @see Animation::animation(int) */
     virtual PostAnimationAction animation(int*);
+
+    /** @see Animation::setup() */
     virtual void setup();
+
+    /** @see Animation::reset() */
     virtual void reset();
 
 private:

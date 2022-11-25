@@ -23,6 +23,11 @@ class Buttons {
     bool max_brightness_is_hold = false;
 
   public:
+
+    /**
+     * Read the hardware buttons and set the variables
+     * accordingly.
+     */
     void update();
 
   private:
