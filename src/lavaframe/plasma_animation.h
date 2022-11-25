@@ -10,25 +10,30 @@
 
 class PlasmaAnimation : public Animation {
 
-  int field[LF_COLS][LF_ROWS];
-  uint32_t plasma[LF_COLS][LF_ROWS];
-  rgb_pixel_t palette[255];
-  int paletteShift;
-  
+  #define dist(x1, y1, x2, y2) sqrt(double((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)))
+
+  int scene;
+
+  double sinFactor1;
+  double sinFactor2;
+  double sinFactor3;
+  double sinFactor4;
+
+  double slowDownFactor;
+
+
 public:
     PlasmaAnimation() {
-      
+
     }
-    
+
     virtual int animation(int*);
     virtual void setup();
-    virtual void reset(); 
-    
+    virtual void reset();
+
 private:
-    void setup_palette();
-    void setup_plasma();
+    void next_scene();
     void calc_plasma();
-    void to_leds();
 };
 
 #endif

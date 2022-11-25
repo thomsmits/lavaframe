@@ -3,8 +3,8 @@
 #include "FastLED.h"
 
 void PlasmaAnimation::setup() {
-  setup_palette();
-  setup_plasma();
+  scene = 0;
+  next_scene();
 }
 
 void PlasmaAnimation::reset() {
@@ -12,104 +12,82 @@ void PlasmaAnimation::reset() {
 
 int PlasmaAnimation::animation(int *delay_in_msec) {
 
-  *delay_in_msec = 30;
+  *delay_in_msec = 2;
 
-  if (lavaFrame.next_animation_requested() == true) {
-    lavaFrame.reset_next_animation_request();
-    return LF_ANIMATION_DONE;
-  }
+  if (lf_next_animation_requested() == true) {
+      lf_reset_next_animation_request();
+      next_scene();
+      if (scene == 1) {
+        return LF_ANIMATION_DONE;
+      }
+    }
 
   calc_plasma();
-  //to_leds();
 
   return LF_ANIMATION_CONTINUE;
 }
 
-#define dist(a, b, c, d) sqrt(double((a - c) * (a - c) + (b - d) * (b - d)))
+
+void PlasmaAnimation::next_scene() {
+
+    scene++;
+
+    switch (scene) {
+
+     /*   case 2:
+            slowDown = 1;
+            intensity = 9;
+            setup_palette_blue();
+            emitter_maxtop_y = LF_ROWS-1;
+            break;
+
+        case 3:
+            slowDown = 1;
+            setup_palette_fire();
+            intensity = 10;
+            emitter_maxtop_y = 0;
+            break;
+
+        case 4:
+            slowDown = 1;
+            setup_palette_blue();
+            intensity = 10;
+            emitter_maxtop_y = LF_ROWS-1;
+            break;*/
+
+        default:
+            sinFactor1 = 1.0;
+            sinFactor2 = 0.0;
+            sinFactor3 = 0.0;
+            sinFactor4 = 0.0;
+            slowDownFactor = 100;
+            scene = 1;
+            break;
+    }
+}
+
 
 void PlasmaAnimation::calc_plasma()
 {
-    int time = int(millis() / 30.0);
+    double time =  millis() / slowDownFactor;
+    double leds = LF_COLS;
+
     for(int y = 0; y < LF_ROWS; y++)
       for(int x = 0; x < LF_COLS; x++)
       {
-        double value = sin(dist(x + time, y, 128.0, 128.0) / 8.0)
-               + sin(dist(x, y, 64.0, 64.0) / 8.0)
-               + sin(dist(x, y + time / 7, 192.0, 64) / 7.0)
-               + sin(dist(x, y, 192.0, 100.0) / 8.0);
-        int color = int((4 + value)) * 32;
+        double value =
+                  sin((dist(x + time, y, LF_COLS / 2, LF_ROWS / 2) / leds) * sinFactor1)
+                + sin((dist(x, y, LF_ROWS / 6, LF_ROWS / 2) / leds) * sinFactor2)
+                + sin((dist(x, y + time / 2.0 , LF_COLS, LF_ROWS) / leds ) * sinFactor3)
+                + sin((dist(x, y, LF_COLS * 2, LF_COLS * 2) / leds) * sinFactor4)
+               ;
 
-        rgb_pixel_t *px = lavaFrame.get_pixel(x, y);
+        int color = int((4 + value) * 128.0);
+
+        rgb_pixel_t *px = lf_get_pixel(x, y);
         px->r = color;
-        px->g = color;
+        px->g = color * 2;
         px->b = 255 - color;
-        //pset(x, y, ColorRGB(color, color * 2, 255 - color));
       }
-  lavaFrame.push_to_strip();
-}
-
-/*void PlasmaAnimation::calc_plasma_old()
-{
-    paletteShift = int(millis() / 30.0);
-
-    //draw every pixel again, with the shifted palette color
-    for (int y = 0; y < LF_ROWS; y++)
-    {
-        for (int x = 0; x < LF_COLS; x++)
-        {
-            field[x][y] =  (plasma[y][x] + paletteShift) % 256;
-        }
-    }
-}*/
-
-void PlasmaAnimation::setup_palette()
-{
-    for (int i = 0; i < 64; i++)
-    {
-        palette[i].r = (byte)(i * 4);
-        palette[i].g = (byte)(0);
-        palette[i].b = (byte)(i * 4);
-
-        palette[i+64].r = (byte)(255 -  i*4);
-        palette[i+64].g = (byte)(0);
-        palette[i+64].b = (byte)(255);
-
-        palette[i+128].r = (byte)(i * 4);
-        palette[i+128].g = (byte)(i * 4);
-        palette[i+128].b = (byte)(255);
-
-        palette[i+192].r = (byte)(255);
-        palette[i+192].g = (byte)(255);
-        palette[i+192].b = (byte)(255);
-    }
-}
-
-void PlasmaAnimation::setup_plasma()
-{
-  for(int y = 0; y < LF_ROWS; y++)
-    for(int x = 0; x < LF_COLS; x++)
-    {
-      int color = int
-      (
-          128.0 + (128.0 * sin(x / 1.0))
-        + 128.0 + (128.0 * sin(y / 2.3))
-      ) / 2;
-      plasma[y][x] = color;
-    }
-}
-
-
-void PlasmaAnimation::to_leds()
-{
-  for (int x = 0; x < LF_COLS; x++) {
-    for (int y = 0; y < LF_ROWS; y++) {
-      byte value = field[x][LF_ROWS-1-y];
-      rgb_pixel_t color = palette[value];
-      rgb_pixel_t *px = lavaFrame.get_pixel(x, y);
-      px->r = color.r;
-      px->g = color.g;
-      px->b = color.b;
-    }
-  }
-  lavaFrame.push_to_strip();
+  lf_push_to_strip();
 }
