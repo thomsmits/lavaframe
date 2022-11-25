@@ -25,11 +25,9 @@ int PlasmaAnimation::animation(int *delay_in_msec) {
   return LF_ANIMATION_CONTINUE;
 }
 
-#define dist(a, b, c, d) sqrt(double((a - c) * (a - c) + (b - d) * (b - d)))
-
 void PlasmaAnimation::calc_plasma()
 {
-    int time = int(millis() / 30.0);
+    int time = int(millis() / 50.0);
     for(int y = 0; y < LF_ROWS; y++)
       for(int x = 0; x < LF_COLS; x++)
       {
@@ -41,75 +39,9 @@ void PlasmaAnimation::calc_plasma()
   
         rgb_pixel_t *px = lf_get_pixel(x, y);
         px->r = color;
-        px->g = color;
+        px->g = color * 2;
         px->b = 255 - color;
         //pset(x, y, ColorRGB(color, color * 2, 255 - color));
       }
-  lf_push_to_strip();
-}
-
-/*void PlasmaAnimation::calc_plasma_old()
-{
-    paletteShift = int(millis() / 30.0);
-
-    //draw every pixel again, with the shifted palette color
-    for (int y = 0; y < LF_ROWS; y++)
-    {
-        for (int x = 0; x < LF_COLS; x++)
-        {
-            field[x][y] =  (plasma[y][x] + paletteShift) % 256;
-        }
-    }
-}*/
-
-void PlasmaAnimation::setup_palette()
-{
-    for (int i = 0; i < 64; i++)
-    {
-        palette[i].r = (byte)(i * 4);
-        palette[i].g = (byte)(0);
-        palette[i].b = (byte)(i * 4);
-
-        palette[i+64].r = (byte)(255 -  i*4);
-        palette[i+64].g = (byte)(0);
-        palette[i+64].b = (byte)(255);
-
-        palette[i+128].r = (byte)(i * 4);
-        palette[i+128].g = (byte)(i * 4);
-        palette[i+128].b = (byte)(255);
-
-        palette[i+192].r = (byte)(255);
-        palette[i+192].g = (byte)(255);
-        palette[i+192].b = (byte)(255);
-    }    
-}
-
-void PlasmaAnimation::setup_plasma()
-{
-  for(int y = 0; y < LF_ROWS; y++)
-    for(int x = 0; x < LF_COLS; x++)
-    {
-      int color = int
-      (
-          128.0 + (128.0 * sin(x / 1.0))
-        + 128.0 + (128.0 * sin(y / 2.3))
-      ) / 2;
-      plasma[y][x] = color;
-    }
-}
-
-
-void PlasmaAnimation::to_leds()
-{
-  for (int x = 0; x < LF_COLS; x++) {
-    for (int y = 0; y < LF_ROWS; y++) {
-      byte value = field[x][LF_ROWS-1-y];
-      rgb_pixel_t color = palette[value];
-      rgb_pixel_t *px = lf_get_pixel(x, y);
-      px->r = color.r;
-      px->g = color.g;
-      px->b = color.b;
-    } 
-  }
   lf_push_to_strip();
 }
