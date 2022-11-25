@@ -1,3 +1,6 @@
+/*
+ * Introduction animation, shown when the lavaframe starts.
+ */
 #ifndef intro_animation_h
 #define intro_animation_h
 
@@ -13,13 +16,13 @@ class IntroAnimation : public Animation {
                                           (rgb_pixel_t){0,191,255},
                                           (rgb_pixel_t){255,182,193}};
 public:
-    IntroAnimation() {
-      
+    IntroAnimation() {      
     }
     
     virtual int animation(int*);
     virtual void setup();
     virtual void reset(); 
+    
 private:
     void draw_point(double b_x, double b_y, rgb_pixel_t *color);
 };

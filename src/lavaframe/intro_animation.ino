@@ -1,15 +1,7 @@
-#include "animation.h"
-#include "intro_animation.h"
-
 /*
-// This animation
-lf_animation_t intro_animation = {
-  setup_intro_animation,
-  setup_intro_animation,
-  loop_intro_animation,
-};
-*/
-
+ * Intro animation shown at frame startup.
+ */
+#include "intro_animation.h"
 
 /**
  * Setup the animation.
@@ -17,9 +9,11 @@ lf_animation_t intro_animation = {
 void IntroAnimation::setup() {
 }
 
+/**
+ * Reset the animation.
+ */
 void IntroAnimation::reset() {
 }
-
 
 /**
  * Function called in a loop.
@@ -70,7 +64,6 @@ int IntroAnimation::animation(int *delay_in_msec) {
 
     return LF_ANIMATION_CONTINUE;
 }
-
 
 
 void IntroAnimation::draw_point(double b_x, double b_y, rgb_pixel_t *color) {

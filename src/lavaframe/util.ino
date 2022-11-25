@@ -4,6 +4,7 @@
 
 #include "util.h"
 
+/*
 void lf_hsv_to_rgb(byte h, byte s, byte v, rgb_pixel_t* rgb) {
 
     if (s == 0) {
@@ -75,7 +76,7 @@ void lf_rgb_to_hsv(rgb_pixel_t* rgb, byte* h, byte* s, byte* v) {
 }
 
 
-
+*/
 
 // Prototype declaration as workaround for IDE bug. 
 // See: https://forum.arduino.cc/t/is-this-a-compiler-bug-typedefd-function-pointer-used-as-parameter-type-fails/325357/2

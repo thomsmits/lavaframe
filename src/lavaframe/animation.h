@@ -1,4 +1,6 @@
-
+/*
+ * 
+ */
 #ifndef animation_h
 #define animation_h
 
@@ -9,30 +11,30 @@
 // Animation is finished, it does not want to be called again
 #define LF_ANIMATION_DONE      2
 
+/**
+ * Base class (interface) for all animations.
+ */
 class Animation {
+  
   public:
-    virtual int animation(int*) = 0;
+
+    /**
+     * Setup the animation.
+     */
     virtual void setup() = 0;
+    
+    /**
+     * Run the animation. 
+     * @param (out) delay_in_msecs time the animation wants the external
+     *              loop to delay
+     * @return instructs the outer program what to do next
+     */
+    virtual int animation(int* delay_in_msec) = 0;
+
+    /**
+     * Reset the animation.
+     */
     virtual void reset() = 0;
 };
-
-
-typedef int  (*lf_animation_function_t)(int*);
-typedef void (*lf_setup_function_t)(void);
-typedef void (*lf_reset_function_t)(void);
-
-/**
- * Struct containing the callback functions for an animation.
- */
-typedef struct {
-    /** Setup function */
-    lf_setup_function_t     setup_f;
-
-    /** Reset function */
-    lf_reset_function_t     reset_f;
-
-    /** The animation itself */
-    lf_animation_function_t animation_f;
-} lf_animation_t;
 
 #endif
