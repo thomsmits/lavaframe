@@ -14,3 +14,12 @@ a white Ikea Sannahed frame 25x25 cm, 169 RGB LED and an ESP32.
 
   * [License](LICENSE.md)
   * [Sources](src/lavaframe/README.md)
+
+## How to write an animation?
+
+If you want to add your own animation, you have to perform the following steps:
+
+  * Create a subclass of `Animation`.
+  * Register the class in the `setup` function of `lavaframe.ino`.
+
+The easiest way is to start from the `TestAnimation` class, defined in `test_animation.ino` and `test_animation.h`.
