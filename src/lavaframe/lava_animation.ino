@@ -48,7 +48,7 @@ void LavaAnimation::next_scene() {
     }
 }
 
-int LavaAnimation::animation(int *delay_in_msec) {
+PostAnimationAction LavaAnimation::animation(int *delay_in_msec) {
 
     *delay_in_msec = 30;
 
@@ -75,11 +75,11 @@ int LavaAnimation::animation(int *delay_in_msec) {
         lavaFrame.reset_next_animation_request();
         next_scene();
         if (scene == 1) {
-            return LF_ANIMATION_DONE;
+            return PostAnimationAction::anim_done;
         }
     }
 
-    return LF_ANIMATION_CONTINUE;
+    return PostAnimationAction::anim_continue;
 }
 
 void LavaAnimation::calc_bubble(int i) {

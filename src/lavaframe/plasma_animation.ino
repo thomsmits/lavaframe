@@ -10,7 +10,7 @@ void PlasmaAnimation::setup() {
 void PlasmaAnimation::reset() {
 }
 
-int PlasmaAnimation::animation(int *delay_in_msec) {
+PostAnimationAction PlasmaAnimation::animation(int *delay_in_msec) {
 
   *delay_in_msec = 2;
 
@@ -18,13 +18,13 @@ int PlasmaAnimation::animation(int *delay_in_msec) {
       lavaFrame.reset_next_animation_request();
       next_scene();
       if (scene == 1) {
-        return LF_ANIMATION_DONE;
+        return PostAnimationAction::anim_done;
       }
     }
 
   calc_plasma();
 
-  return LF_ANIMATION_CONTINUE;
+  return PostAnimationAction::anim_continue;
 }
 
 

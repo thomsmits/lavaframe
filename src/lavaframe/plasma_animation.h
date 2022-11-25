@@ -27,7 +27,7 @@ public:
 
     }
 
-    virtual int animation(int*);
+    virtual PostAnimationAction animation(int*);
     virtual void setup();
     virtual void reset();
 

@@ -6,7 +6,7 @@ void TestAnimation::setup() {
 void TestAnimation::reset() {
 }
 
-int TestAnimation::animation(int *delay_in_msec) {
+PostAnimationAction TestAnimation::animation(int *delay_in_msec) {
     static int x = 0;
     static int y = 0;
 
@@ -18,7 +18,7 @@ int TestAnimation::animation(int *delay_in_msec) {
     if (y >= LF_ROWS) {
         x = 0;
         y = 0;
-        return LF_ANIMATION_DONE;
+        return PostAnimationAction::anim_done;
     }
 
     x++;
@@ -35,8 +35,8 @@ int TestAnimation::animation(int *delay_in_msec) {
 
      if (lavaFrame.next_animation_requested() == true) {
         lavaFrame.reset_next_animation_request();
-        return LF_ANIMATION_DONE;
+        return PostAnimationAction::anim_done;
     }
 
-    return LF_ANIMATION_CONTINUE;
+    return PostAnimationAction::anim_continue;
 }

@@ -7,7 +7,7 @@ void CircleAnimation::setup() {
 void CircleAnimation::reset() {
 }
 
-int CircleAnimation::animation(int *delay_in_msec) {
+PostAnimationAction CircleAnimation::animation(int *delay_in_msec) {
 
     static bool first_run = true;
     static int r = 1;
@@ -62,10 +62,10 @@ int CircleAnimation::animation(int *delay_in_msec) {
     *delay_in_msec = 500;
 
     if (lavaFrame.next_animation_requested() == true) {
-        return LF_ANIMATION_DONE;
+        return PostAnimationAction::anim_done;
     }
 
-    return LF_ANIMATION_CONTINUE;
+    return PostAnimationAction::anim_continue;
 }
 
 int CircleAnimation::animation_2(int *delay_in_msec) {
@@ -102,10 +102,10 @@ int CircleAnimation::animation_2(int *delay_in_msec) {
     *delay_in_msec = 10;
 
     if (lavaFrame.next_animation_requested() == true) {
-        return LF_ANIMATION_DONE;
+        return PostAnimationAction::anim_done;
     }
 
-    return LF_ANIMATION_CONTINUE;
+    return PostAnimationAction::anim_continue;
 }
 
 int CircleAnimation::animation_3(int *delay_in_msec) {
@@ -142,8 +142,8 @@ int CircleAnimation::animation_3(int *delay_in_msec) {
     *delay_in_msec = 5;
 
     if (lavaFrame.next_animation_requested() == true) {
-        return LF_ANIMATION_DONE;
+        return PostAnimationAction::anim_done;
     }
 
-    return LF_ANIMATION_CONTINUE;
+    return PostAnimationAction::anim_continue;
 }

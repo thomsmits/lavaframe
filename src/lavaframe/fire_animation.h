@@ -36,7 +36,7 @@ class FireAnimation : public Animation {
     }
 
     /** @see Animation::animation(int) */
-    virtual int animation(int*);
+    virtual PostAnimationAction animation(int*);
 
     /** @see Animation::setup() */
     virtual void setup();

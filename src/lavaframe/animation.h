@@ -5,12 +5,23 @@
 #ifndef animation_h
 #define animation_h
 
-// Returned by the animation function if it wants to be called
-// in the next loop
-#define LF_ANIMATION_CONTINUE  1
+/**
+ * Enumeration defining what the main program
+ * should do after the animation function returns.
+ */
+enum PostAnimationAction {
 
-// Animation is finished, it does not want to be called again
-#define LF_ANIMATION_DONE      2
+    /**
+     * Returned by the animation function if it wants to be called
+     * in the next loop.
+     */
+    anim_continue = 1,
+
+    /**
+     * Animation is finished, it does not want to be called again.
+     */
+    anim_done = 2
+};
 
 /**
  * Base class (interface) for all animations.
@@ -30,7 +41,7 @@ class Animation {
      *              loop to delay
      * @return instructs the outer program what to do next
      */
-    virtual int animation(int* delay_in_msec) = 0;
+    virtual PostAnimationAction animation(int* delay_in_msec) = 0;
 
     /**
      * Reset the animation.

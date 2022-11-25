@@ -95,10 +95,10 @@ void Frame::loop() {
 
     int last_animation_index = animation_index;
 
-    if (ret_val == LF_ANIMATION_CONTINUE) {
+    if (ret_val == PostAnimationAction::anim_continue) {
         // sleep as requested by the animation
         delay(delay_in_msec);
-    } else if (ret_val == LF_ANIMATION_DONE) {
+    } else if (ret_val == PostAnimationAction::anim_done) {
         // Animation done, go to next animation
         animation_index++;
     }

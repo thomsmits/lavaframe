@@ -6,7 +6,7 @@ void IntroAnimation::setup() {
 void IntroAnimation::reset() {
 }
 
-int IntroAnimation::animation(int *delay_in_msec) {
+PostAnimationAction IntroAnimation::animation(int *delay_in_msec) {
 
     lavaFrame.clear();
 
@@ -36,7 +36,7 @@ int IntroAnimation::animation(int *delay_in_msec) {
         }
 
     } else {
-        return LF_ANIMATION_DONE;
+        return PostAnimationAction::anim_done;
     }
 
     lavaFrame.push_to_strip();
@@ -44,10 +44,10 @@ int IntroAnimation::animation(int *delay_in_msec) {
     *delay_in_msec = 10;
 
     if (lavaFrame.next_animation_requested() == true) {
-        return LF_ANIMATION_DONE;
+        return PostAnimationAction::anim_done;
     }
 
-    return LF_ANIMATION_CONTINUE;
+    return PostAnimationAction::anim_continue;
 }
 
 

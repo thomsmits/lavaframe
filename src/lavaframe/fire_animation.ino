@@ -9,7 +9,7 @@ void FireAnimation::setup() {
 void FireAnimation::reset() {
 }
 
-int FireAnimation::animation(int *delay_in_msec) {
+PostAnimationAction FireAnimation::animation(int *delay_in_msec) {
 
     if (buttons.animation_interaction_pressed == true) {
       // next_scene();
@@ -25,11 +25,11 @@ int FireAnimation::animation(int *delay_in_msec) {
       lavaFrame.reset_next_animation_request();
       next_scene();
       if (scene == 1) {
-        return LF_ANIMATION_DONE;
+        return PostAnimationAction::anim_done;
       }
     }
 
-    return LF_ANIMATION_CONTINUE;
+    return PostAnimationAction::anim_continue;
 }
 
 void FireAnimation::next_scene() {
