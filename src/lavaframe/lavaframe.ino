@@ -5,7 +5,7 @@
  *
  * Main file.
  */
- 
+
 #include <FastLED.h>
 #include "types.h"
 #include "buttons.h"
@@ -20,6 +20,7 @@
 #include "test_animation.h"
 #include "bubbles_animation.h"
 #include "circle_animation.h"
+#include "plasma_animation.h"
 
 // Settings for the FastLED library
 #define LED_TYPE        WS2811
@@ -163,7 +164,8 @@ static void register_animations() {
    animations[registered_animations_count++]     = new TestAnimation;
    animations[registered_animations_count++]     = new BubblesAnimation;
    animations[registered_animations_count++]     = new CircleAnimation;
-   
+   animations[registered_animations_count++]     = new PlasmaAnimation;
+
    /*
    //animations[registered_animations_count++]   = test_animation;
    animations[registered_animations_count++]     = lava_animation;
