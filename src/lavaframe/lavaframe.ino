@@ -182,7 +182,7 @@ int registered_animations_count = 0;
 static void register_animations() {
 
 
-   animations[registered_animations_count++]     = new IntroAnimation;
+  // animations[registered_animations_count++]     = new IntroAnimation;
    animations[registered_animations_count++]     = new PlasmaAnimation;
    
    /*

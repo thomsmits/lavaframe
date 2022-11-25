@@ -10,8 +10,8 @@
 
 class PlasmaAnimation : public Animation {
 
-  int field[LF_COLS][LF_ROWS+1];
-  uint32_t plasma[LF_COLS][LF_ROWS+1];
+  int field[LF_COLS][LF_ROWS];
+  uint32_t plasma[LF_COLS][LF_ROWS];
   rgb_pixel_t palette[255];
   int paletteShift;
   
@@ -25,9 +25,10 @@ public:
     virtual void reset(); 
     
 private:
-    void calcPlasma();
     void setup_palette();
     void setup_plasma();
+    void calc_plasma();
+    void to_leds();
 };
 
 #endif
