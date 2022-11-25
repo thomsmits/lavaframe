@@ -14,8 +14,8 @@ int PlasmaAnimation::animation(int *delay_in_msec) {
 
   *delay_in_msec = 2;
 
-  if (lf_next_animation_requested() == true) {
-      lf_reset_next_animation_request();
+  if (lavaFrame.next_animation_requested() == true) {
+      lavaFrame.reset_next_animation_request();
       next_scene();
       if (scene == 1) {
         return LF_ANIMATION_DONE;
@@ -84,10 +84,10 @@ void PlasmaAnimation::calc_plasma()
 
         int color = int((4 + value) * 128.0);
 
-        rgb_pixel_t *px = lf_get_pixel(x, y);
+        rgb_pixel_t *px = lavaFrame.get_pixel(x, y);
         px->r = color;
         px->g = color * 2;
         px->b = 255 - color;
       }
-  lf_push_to_strip();
+  lavaFrame.push_to_strip();
 }
