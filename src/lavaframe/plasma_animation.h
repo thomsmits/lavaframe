@@ -12,11 +12,7 @@ class PlasmaAnimation : public Animation {
 
   #define dist(x1, y1, x2, y2) sqrt(double((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)))
 
-  int field[LF_COLS][LF_ROWS];
-  uint32_t plasma[LF_COLS][LF_ROWS];
-  rgb_pixel_t palette[255];
-  int paletteShift;
-  
+ 
 public:
     PlasmaAnimation() {
       
@@ -27,10 +23,7 @@ public:
     virtual void reset(); 
     
 private:
-    void setup_palette();
-    void setup_plasma();
     void calc_plasma();
-    void to_leds();
 };
 
 #endif
