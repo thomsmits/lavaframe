@@ -52,7 +52,7 @@ int LavaAnimation::animation(int *delay_in_msec) {
 
     *delay_in_msec = 30;
 
-    if (lf_buttons_animation_interaction_pressed == true) {
+    if (buttons.animation_interaction_pressed == true) {
         // next_scene();
     }
 

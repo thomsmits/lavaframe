@@ -14,6 +14,8 @@
 #define DEBUG_OUTPUT
 #include "trace.h"
 #include "animation.h"
+
+// Load headers for all custom animations here
 #include "intro_animation.h"
 #include "lava_animation.h"
 #include "fire_animation.h"
@@ -34,10 +36,13 @@
 static bool lf_slideshow_mode = true;
 static unsigned long lf_slideshow_last_action;
 
+// Access to the button state
+Buttons buttons;
+
 // find out, if it is time for the next animation.
 // however, the decision should be made in animation when it is a good moment to change and not be forced.
 static bool lf_next_animation_requested() {
-    if (lf_buttons_next_animation_requested == true)  {
+    if (buttons.next_animation_requested == true)  {
         return true;
     }
     if (lf_slideshow_mode == true && millis() - lf_slideshow_last_action > SLIDESHOW_DELAY * 1000) {
@@ -50,8 +55,6 @@ static bool lf_next_animation_requested() {
 static bool lf_reset_next_animation_request() {
     lf_slideshow_last_action = millis();
 }
-
-
 
 // Internal representation of the pixels
 static rgb_pixel_t frame[LF_ROWS * LF_COLS];
@@ -215,12 +218,12 @@ void loop() {
     // Call the current animation function
     int ret_val = animations[animation_index]->animation(&delay_in_msec);
 
-    lf_update_buttons();
+    buttons.update();
 
-    if (lf_buttons_slideshow_mode_is_hold == true) {
+    if (buttons.slideshow_mode_is_hold == true) {
       change_slideshow_mode();
-      while(lf_buttons_slideshow_mode_is_hold == true) {
-          lf_update_buttons();
+      while(buttons.slideshow_mode_is_hold == true) {
+          buttons.update();
       }
     }
 

@@ -11,7 +11,7 @@ void FireAnimation::reset() {
 
 int FireAnimation::animation(int *delay_in_msec) {
 
-    if (lf_buttons_animation_interaction_pressed == true) {
+    if (buttons.animation_interaction_pressed == true) {
       // next_scene();
     }
 
