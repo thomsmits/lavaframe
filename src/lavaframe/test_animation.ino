@@ -1,24 +1,11 @@
 #include "test_animation.h"
 
-/**
- * Setup the animation.
- */
 void TestAnimation::setup() {
 }
 
-/**
- * Reset the animation.
- */
 void TestAnimation::reset() {
 }
 
-
-/**
- * Function called in a loop.
- * 
- * @param (out) delay_in_msec the delay requested by the function
- * @return constant requesting the next action of the loop
- */
 int TestAnimation::animation(int *delay_in_msec) {
     static int x = 0;
     static int y = 0;

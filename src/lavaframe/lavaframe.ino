@@ -1,4 +1,4 @@
-/**
+/*
  * Lavaframe
  *
  * (c) 2022 Thomas Smits & Daniel Springwald
@@ -14,6 +14,8 @@
 #define DEBUG_OUTPUT
 #include "trace.h"
 #include "animation.h"
+
+// Load headers for all custom animations here
 #include "intro_animation.h"
 #include "lava_animation.h"
 #include "fire_animation.h"
@@ -34,24 +36,25 @@
 static bool lf_slideshow_mode = true;
 static unsigned long lf_slideshow_last_action;
 
+// Access to the button state
+Buttons buttons;
+
 // find out, if it is time for the next animation.
 // however, the decision should be made in animation when it is a good moment to change and not be forced.
 static bool lf_next_animation_requested() {
-  if (lf_buttons_next_animation_requested == true)  {
-    return true;
-  }
-  if (lf_slideshow_mode == true && millis() - lf_slideshow_last_action > SLIDESHOW_DELAY * 1000) {
-    lf_reset_next_animation_request();
-    return true;
-  }
-  return false;
+    if (buttons.next_animation_requested == true)  {
+        return true;
+    }
+    if (lf_slideshow_mode == true && millis() - lf_slideshow_last_action > SLIDESHOW_DELAY * 1000) {
+        lf_reset_next_animation_request();
+        return true;
+    }
+    return false;
 }
 
 static bool lf_reset_next_animation_request() {
-  lf_slideshow_last_action = millis();
+    lf_slideshow_last_action = millis();
 }
-
-
 
 // Internal representation of the pixels
 static rgb_pixel_t frame[LF_ROWS * LF_COLS];
@@ -156,24 +159,14 @@ int registered_animations_count = 0;
  * Register all known animations. New animations must be added here.
  */
 static void register_animations() {
+    animations[registered_animations_count++]     = new IntroAnimation;
+    animations[registered_animations_count++]     = new LavaAnimation;
+    animations[registered_animations_count++]     = new FireAnimation;
+    animations[registered_animations_count++]     = new TestAnimation;
+    animations[registered_animations_count++]     = new BubblesAnimation;
+    animations[registered_animations_count++]     = new CircleAnimation;
+    animations[registered_animations_count++]     = new PlasmaAnimation;
 
-
-   animations[registered_animations_count++]     = new IntroAnimation;
-   animations[registered_animations_count++]     = new LavaAnimation;
-   animations[registered_animations_count++]     = new FireAnimation;
-   animations[registered_animations_count++]     = new TestAnimation;
-   animations[registered_animations_count++]     = new BubblesAnimation;
-   animations[registered_animations_count++]     = new CircleAnimation;
-   animations[registered_animations_count++]     = new PlasmaAnimation;
-
-   /*
-   //animations[registered_animations_count++]   = test_animation;
-   animations[registered_animations_count++]     = lava_animation;
-   animations[registered_animations_count++]     = bubbles_animation;
-   animations[registered_animations_count++]     = fire_animation;
-   //animations[registered_animations_count++]   = plasma_animation;
-   //animations[registered_animations_count++]   = circle_animation;
-*/
    // Add more animations here. Increase MAX_ANIMATIONS
    // accordingly if you exceed the number of slots in the array.
    // ...
@@ -196,10 +189,10 @@ void setup() {
     pinMode(BUTTON_2_PIN, INPUT_PULLDOWN);
 
     #ifdef LDR_PIN
-      pinMode(LDR_PIN, INPUT_PULLDOWN);
+        pinMode(LDR_PIN, INPUT_PULLDOWN);
     #endif
 
-     adjust_global_brightness();
+    adjust_global_brightness();
 
     // Initialize the animations
     for (int i = 0; i < registered_animations_count; i++) {
@@ -225,12 +218,12 @@ void loop() {
     // Call the current animation function
     int ret_val = animations[animation_index]->animation(&delay_in_msec);
 
-    lf_update_buttons();
+    buttons.update();
 
-    if (lf_buttons_slideshow_mode_is_hold == true) {
+    if (buttons.slideshow_mode_is_hold == true) {
       change_slideshow_mode();
-      while(lf_buttons_slideshow_mode_is_hold == true) {
-          lf_update_buttons();
+      while(buttons.slideshow_mode_is_hold == true) {
+          buttons.update();
       }
     }
 
@@ -270,26 +263,26 @@ void change_slideshow_mode () {
 
         lf_clear();
         if (lf_slideshow_mode == true) {
-          // green triangle
-          for (int x = 0; x < LF_COLS - 2 * borderX; x++) {
-            int heightDiv2 = max(1, (int)(x * 0.75));
-            for (int y = -heightDiv2; y < heightDiv2-1 ; y++) {
-               rgb_pixel_t *pxl = lf_get_pixel(LF_COLS - x - borderX, LF_ROWS / 2 + y);
-               pxl->r = 0;
-               pxl->g = 255;
-               pxl->b = 0;
+            // green triangle
+            for (int x = 0; x < LF_COLS - 2 * borderX; x++) {
+                int heightDiv2 = max(1, (int)(x * 0.75));
+                for (int y = -heightDiv2; y < heightDiv2-1 ; y++) {
+                    rgb_pixel_t *pxl = lf_get_pixel(LF_COLS - x - borderX, LF_ROWS / 2 + y);
+                    pxl->r = 0;
+                    pxl->g = 255;
+                    pxl->b = 0;
+                }
             }
-          }
         } else {
           // red square
-          for (int x = borderX; x < LF_COLS - borderX; x++) {
-            for (int y = borderY; y < LF_ROWS - borderY; y++) {
-               rgb_pixel_t *pxl = lf_get_pixel(x, y);
-               pxl->r = 255;
-               pxl->g = 0;
-               pxl->b = 0;
+            for (int x = borderX; x < LF_COLS - borderX; x++) {
+                for (int y = borderY; y < LF_ROWS - borderY; y++) {
+                    rgb_pixel_t *pxl = lf_get_pixel(x, y);
+                    pxl->r = 255;
+                    pxl->g = 0;
+                    pxl->b = 0;
+                }
             }
-          }
         }
         lf_push_to_strip();
         delay(300);
@@ -320,5 +313,4 @@ void adjust_global_brightness () {
   #else
     FastLED.setBrightness(MAX_BRIGHTNESS);   // set master brightness control
   #endif
-
 }

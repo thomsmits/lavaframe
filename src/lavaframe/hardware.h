@@ -19,5 +19,4 @@
 // Pin for ambient light sensor (define only if LDR exists!)
 #define LDR_PIN      34
 
-
 #endif

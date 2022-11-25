@@ -5,17 +5,26 @@
 #include "animation.h"
 #include "hardware.h"
 
+/**
+ * Animation of concentric circles.
+ */
 class CircleAnimation : public Animation {
 
   public:
-  
-    CircleAnimation() {      
+
+    /** Create a new instance. */
+    CircleAnimation() {
     }
-    
+
+   /** @see Animation::animation(int) */
     virtual int animation(int*);
+
+    /** @see Animation::setup() */
     virtual void setup();
-    virtual void reset(); 
-    
+
+    /** @see Animation::reset() */
+    virtual void reset();
+
   private:
 
     virtual int animation_2(int*);
