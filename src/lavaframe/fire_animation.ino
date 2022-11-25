@@ -121,12 +121,12 @@ void FireAnimation::calc_emitter() {
         field[x][LF_ROWS-1] = 0;
     }
 
-    for (int i=0; i < emitters;i++) {
+    for (int i = 0; i < emitters;i++) {
         emitter_counter[i]++;
 
-        if (emitter_counter[i] > (max(i*2,1)) * slowDown) {
+        if (emitter_counter[i] > (max(i*2, 1)) * slowDown) {
 
-            emitter_counter[i] =0;
+            emitter_counter[i] = 0;
 
             emitter_x[i] += emitter_direction_x[i];
             emitter_y[i] += emitter_direction_y[i];
