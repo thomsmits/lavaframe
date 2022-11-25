@@ -20,12 +20,35 @@ int PlasmaAnimation::animation(int *delay_in_msec) {
   }
   
   calc_plasma();
-  to_leds();
+  //to_leds();
 
   return LF_ANIMATION_CONTINUE;
 }
 
+#define dist(a, b, c, d) sqrt(double((a - c) * (a - c) + (b - d) * (b - d)))
+
 void PlasmaAnimation::calc_plasma()
+{
+    int time = int(millis() / 30.0);
+    for(int y = 0; y < LF_ROWS; y++)
+      for(int x = 0; x < LF_COLS; x++)
+      {
+        double value = sin(dist(x + time, y, 128.0, 128.0) / 8.0)
+               + sin(dist(x, y, 64.0, 64.0) / 8.0)
+               + sin(dist(x, y + time / 7, 192.0, 64) / 7.0)
+               + sin(dist(x, y, 192.0, 100.0) / 8.0);
+        int color = int((4 + value)) * 32;
+  
+        rgb_pixel_t *px = lf_get_pixel(x, y);
+        px->r = color;
+        px->g = color;
+        px->b = 255 - color;
+        //pset(x, y, ColorRGB(color, color * 2, 255 - color));
+      }
+  lf_push_to_strip();
+}
+
+/*void PlasmaAnimation::calc_plasma_old()
 {
     paletteShift = int(millis() / 30.0);
 
@@ -37,7 +60,7 @@ void PlasmaAnimation::calc_plasma()
             field[x][y] =  (plasma[y][x] + paletteShift) % 256;
         }
     }
-}
+}*/
 
 void PlasmaAnimation::setup_palette()
 {
