@@ -53,7 +53,6 @@ class FireAnimation : public Animation {
     void calc_fire();
     void calc_emitter();
     void fire_to_leds();
-    void setup_palette_fire2();
     void setup_palette_fire();
     void setup_palette_blue();
 };
