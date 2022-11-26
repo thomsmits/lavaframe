@@ -40,11 +40,19 @@ void FireAnimation::next_scene() {
     switch (scene) {
 
         case 2:
+            // standard fire
+            slowDown = 1;
+            setup_palette_fire();
+            intensity = 9;
+            emitter_maxtop_y = LF_ROWS-1;
+            break;
+
+        /*case 2:
             slowDown = 1;
             intensity = 9;
             setup_palette_blue();
             emitter_maxtop_y = LF_ROWS-1;
-            break;
+            break;*/
 
         case 3:
             slowDown = 1;
@@ -63,7 +71,7 @@ void FireAnimation::next_scene() {
         default:
             // standard fire
             slowDown = 1;
-            setup_palette_fire();
+            setup_palette_fire2();
             intensity = 9;
             emitter_maxtop_y = LF_ROWS-1;
             scene = 1;
@@ -178,7 +186,24 @@ void FireAnimation::fire_to_leds() {
     lavaFrame.push_to_strip();
 }
 
+void FireAnimation::setup_palette_fire2() {
+
+
+  
+  rgb_pixel_t colors[] = {
+        { 0, 0, 0 },
+        { 255, 0, 0 },
+        { 255, 255, 0 },
+        { 255, 255, 255 },
+        { 0, 255, 255 }
+    };
+
+  fill_palette(palette, 256,  colors, 5); 
+}
+
+
 void FireAnimation::setup_palette_fire() {
+
     for (int i = 0; i < 64; i++) {
         palette[i].r = (byte)(i * 4);
         palette[i].g = (byte)(0);
@@ -196,24 +221,16 @@ void FireAnimation::setup_palette_fire() {
         palette[i+192].g = (byte)(255);
         palette[i+192].b = (byte)(i * 4);
     }
+    return;
 }
 
 void FireAnimation::setup_palette_blue() {
-    for (int i = 0; i < 64; i++) {
-        palette[i].r = (byte)(i * 4);
-        palette[i].g = (byte)(0);
-        palette[i].b = (byte)(i * 4);
-
-        palette[i+64].r = (byte)(255 - i*4);
-        palette[i+64].g = (byte)(0);
-        palette[i+64].b = (byte)(255);
-
-        palette[i+128].r = (byte)(i * 4);
-        palette[i+128].g = (byte)(i * 4);
-        palette[i+128].b = (byte)(255);
-
-        palette[i+192].r = (byte)(255);
-        palette[i+192].g = (byte)(255);
-        palette[i+192].b = (byte)(255);
-    }
+    rgb_pixel_t colors[] = {
+        { 0, 0, 0 },
+        { 255, 0, 255 },
+        { 0, 0, 255 },
+        { 255, 255, 255 },
+        { 255, 255, 255 }
+    };
+  fill_palette(palette, 256,  colors, 5);
 }

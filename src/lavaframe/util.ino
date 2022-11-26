@@ -1,5 +1,20 @@
 #include "util.h"
 
+void fill_palette(rgb_pixel_t palette[], int palette_size,  rgb_pixel_t colors[], int colors_size) {
+  int step_size = palette_size / (colors_size-1);
+  rgb_pixel_t color1;
+  rgb_pixel_t color2;
+  double factor;
+  for(int i=0; i < palette_size; i++) {
+     color1 = colors[i/step_size];
+     color2 = colors[i/step_size+1];
+     factor = (i % step_size) / double(step_size);
+     palette[i].r = color1.r + (color2.r - color1.r) * factor;
+     palette[i].g = color1.g + (color2.g - color1.g) * factor;
+     palette[i].b = color1.b + (color2.b - color1.b) * factor;   
+  }
+}
+
 void lf_hsv_to_rgb(byte h, byte s, byte v, rgb_pixel_t* rgb) {
 
     if (s == 0) {

@@ -4,6 +4,13 @@
 #ifndef util_h
 #define util_h
 
+
+/**
+ * Fills a palette evenly spread with the specified colors
+ *
+ */
+void fill_palette(rgb_pixel_t palette[], int palette_size,  rgb_pixel_t colors[], int colors_size);
+
 /**
  * Convert an HSV value to an RGB value and write it directly into the
  * given pixe.
