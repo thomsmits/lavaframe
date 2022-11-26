@@ -35,6 +35,9 @@ Frame lavaFrame;
  * Setup routine.
  */
 void setup() {
+
+    lavaFrame.register_animation(new PlasmaAnimation);
+
     // Add all animations you want to show here.
     // See animation.h on how to write an animation.
     lavaFrame.register_animation(new IntroAnimation);

@@ -43,7 +43,7 @@ void BubblesAnimation::next_scene() {
 
     for (int i=0; i < bubbles; i++) {
         bubble_x[i] = (i*5) % LF_COLS;
-        bubble_y[i] = (i*5) % LF_ROWS; 
+        bubble_y[i] = (i*7) % LF_ROWS; 
         bubble_speed[i] = 9 / slowDown + i / slowDown;
         bubble_radius[i] = (int)(2 + (i * bubble_size / 3.0));
     }

@@ -31,51 +31,52 @@ void PlasmaAnimation::next_scene() {
 
     scene++;
 
+    rgb_pixel_t colors1[] = {
+      { 255, 0, 0 },
+      { 0, 0, 255 },
+      { 0, 255, 0 },
+      { 255, 0, 128 },
+      { 255, 255, 255 },
+      { 255, 255, 0 },
+      { 0, 255, 255 },
+      { 255, 128, 255 },
+      { 255, 0, 0 } 
+    };
+
+    rgb_pixel_t colors2[] = {
+      { 0, 0, 0 },
+      { 255, 0, 0 },
+      { 255, 255, 0 },
+      { 0, 0, 255 },
+      { 0, 255, 255 },
+      { 0, 0, 0 },
+      { 255, 0, 0 },
+      { 255, 255, 0 },
+      { 255, 0, 255 },
+      { 0, 255, 255 },
+      { 0, 0, 0 }
+    };
+
     switch (scene) {
+      
+      case 2:
+          sinFactor1 = 1.0;
+          sinFactor2 = 1.0;
+          sinFactor3 = 1.0;
+          sinFactor4 = 1.0;
+          slowDownFactor = 100;
+          fill_palette(palette, 256,  colors2, 11); 
+        break;
 
-     /*   case 2:
-            slowDown = 1;
-            intensity = 9;
-            setup_palette_blue();
-            emitter_maxtop_y = LF_ROWS-1;
-            break;
-
-        case 3:
-            slowDown = 1;
-            setup_palette_fire();
-            intensity = 10;
-            emitter_maxtop_y = 0;
-            break;
-
-        case 4:
-            slowDown = 1;
-            setup_palette_blue();
-            intensity = 10;
-            emitter_maxtop_y = LF_ROWS-1;
-            break;*/
-
-        default:
-            sinFactor1 = 1.0;
-            sinFactor2 = 1.0;
-            sinFactor3 = 1.0;
-            sinFactor4 = 1.0;
-            slowDownFactor = 100;
-            scene = 1;
-            rgb_pixel_t colors[] = {
-                  { 0, 0, 0 },
-                  { 255, 0, 0 },
-                  { 255, 255, 0 },
-                  { 0, 0, 255 },
-                  { 0, 255, 255 },
-                  { 0, 0, 0 },
-                  { 255, 0, 0 },
-                  { 255, 255, 0 },
-                  { 255, 0, 255 },
-                  { 0, 255, 255 },
-                  { 0, 0, 0 }
-              };
-            fill_palette(palette, 256,  colors, 11); 
-            break;
+      default:
+        scene = 1;
+        sinFactor1 = 1.0;
+        sinFactor2 = 1.0;
+        sinFactor3 = 1.0;
+        sinFactor4 = 0.0;
+        slowDownFactor = 100;
+        fill_palette(palette, 256,  colors1, 9); 
+        break;
     }
 }
 
