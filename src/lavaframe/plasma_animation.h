@@ -21,6 +21,8 @@ class PlasmaAnimation : public Animation {
 
     double slowDownFactor;
 
+    rgb_pixel_t palette[256];
+
 public:
 
     /** Create a new instance. */

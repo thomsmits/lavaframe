@@ -25,7 +25,7 @@ class FireAnimation : public Animation {
     int emitter_direction_y[emitters]; // emitter moving in y direction
     int emitter_maxtop_y = LF_ROWS-1;  // how high can an emitter go? 0 = max top, LF_ROWS-1 = baseline
     int field[LF_COLS][LF_ROWS+1];
-    rgb_pixel_t palette[255];
+    rgb_pixel_t palette[256];
 
     int scene = 0;
 

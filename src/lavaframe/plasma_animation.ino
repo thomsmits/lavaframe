@@ -56,11 +56,25 @@ void PlasmaAnimation::next_scene() {
 
         default:
             sinFactor1 = 1.0;
-            sinFactor2 = 0.0;
-            sinFactor3 = 0.0;
-            sinFactor4 = 0.0;
+            sinFactor2 = 1.0;
+            sinFactor3 = 1.0;
+            sinFactor4 = 1.0;
             slowDownFactor = 100;
             scene = 1;
+            rgb_pixel_t colors[] = {
+                  { 0, 0, 0 },
+                  { 255, 0, 0 },
+                  { 255, 255, 0 },
+                  { 0, 0, 255 },
+                  { 0, 255, 255 },
+                  { 0, 0, 0 },
+                  { 255, 0, 0 },
+                  { 255, 255, 0 },
+                  { 255, 0, 255 },
+                  { 0, 255, 255 },
+                  { 0, 0, 0 }
+              };
+            fill_palette(palette, 256,  colors, 11); 
             break;
     }
 }
@@ -70,21 +84,21 @@ void PlasmaAnimation::calc_plasma()
     double time =  millis() / slowDownFactor;
     double leds = LF_COLS;
 
+    int sins = int(sinFactor1 + sinFactor2 + sinFactor3 + sinFactor4);
+
     for(int y = 0; y < LF_ROWS; y++) {
         for(int x = 0; x < LF_COLS; x++) {
             double value =
-                      sin((dist(x + time, y, LF_COLS / 2, LF_ROWS / 2) / leds) * sinFactor1)
-                    + sin((dist(x, y, LF_ROWS / 6, LF_ROWS / 2) / leds) * sinFactor2)
-                    + sin((dist(x, y + time / 2.0 , LF_COLS, LF_ROWS) / leds ) * sinFactor3)
-                    + sin((dist(x, y, LF_COLS * 2, LF_COLS * 2) / leds) * sinFactor4)
+                      sin((dist(x + time / 3, y, LF_COLS / 2, LF_ROWS / 2) / leds) * sinFactor1)
+                    + sin((dist(x, y, LF_ROWS / 12, LF_ROWS / 6) / leds) * sinFactor2)
+                    + sin((dist(x, y + time / 2, LF_COLS, LF_ROWS) / leds ) * sinFactor3)
+                    + sin((dist(x, y, LF_COLS * 2, LF_COLS * 3) / leds) * sinFactor4)
                   ;
-
-            int color = int((4 + value) * 128.0);
-
-            rgb_pixel_t *px = lavaFrame.get_pixel(x, y);
-            px->r = color;
-            px->g = color * 2;
-            px->b = 255 - color;
+              int colNo = int((sins + value) * (255.0 / (sins*2)));
+              rgb_pixel_t *px = lavaFrame.get_pixel(x, y);
+              px->r = palette[colNo].r;
+              px->g = palette[colNo].g;
+              px->b = palette[colNo].b;
         }
     }
     lavaFrame.push_to_strip();
