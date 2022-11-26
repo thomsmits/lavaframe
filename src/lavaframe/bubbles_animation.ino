@@ -12,6 +12,8 @@ void BubblesAnimation::next_scene() {
 
     scene++;
 
+    double slowDown = 300.0;
+
     switch (scene) {
 
       case 2:
@@ -39,19 +41,17 @@ void BubblesAnimation::next_scene() {
           break;
     }
 
-    int border = 2;
-
     for (int i=0; i < bubbles; i++) {
-        bubble_x[i] = (i*7) % LF_COLS; //border + (((LF_COLS -2 -border*2) * i )/ bubbles ) ;
-        bubble_y[i] = (i*5) % LF_ROWS; //(i * (LF_ROWS / 4)) % (LF_ROWS);
-        bubble_speed[i] = 0.1 + i / 30.0;
+        bubble_x[i] = (i*5) % LF_COLS;
+        bubble_y[i] = (i*5) % LF_ROWS; 
+        bubble_speed[i] = 9 / slowDown + i / slowDown;
         bubble_radius[i] = (int)(2 + (i * bubble_size / 3.0));
     }
 }
 
 PostAnimationAction BubblesAnimation::animation(int *delay_in_msec) {
 
-    *delay_in_msec = 30;
+    *delay_in_msec = 10;
 
     lavaFrame.clear();    // clear field
 
@@ -78,8 +78,8 @@ void BubblesAnimation::calc_bubble(int i) {
 
     bubble_y[i] -= bubble_speed[i];
 
-    if (bubble_y[i] <= -LF_ROWS - bubble_radius[i] * 2 ) {
-        bubble_y[i] = LF_ROWS + bubble_radius[i] * 2;
+    if (bubble_y[i] <= -bubble_radius[i]) {
+        bubble_y[i] = LF_ROWS + bubble_radius[i];
     }
 }
 
