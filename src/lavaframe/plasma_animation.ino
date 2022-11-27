@@ -36,7 +36,6 @@ void PlasmaAnimation::next_scene() {
       { 0, 0, 255 },
       { 0, 255, 0 },
       { 255, 0, 128 },
-      { 255, 255, 255 },
       { 255, 255, 0 },
       { 0, 255, 255 },
       { 255, 128, 255 },
@@ -44,38 +43,38 @@ void PlasmaAnimation::next_scene() {
     };
 
     rgb_pixel_t colors2[] = {
-      { 0, 0, 0 },
+      { 128, 255, 0 },
       { 255, 0, 0 },
       { 255, 255, 0 },
       { 0, 0, 255 },
       { 0, 255, 255 },
-      { 0, 0, 0 },
+      { 255, 255, 0 },
       { 255, 0, 0 },
       { 255, 255, 0 },
       { 255, 0, 255 },
       { 0, 255, 255 },
-      { 0, 0, 0 }
+      { 128, 255, 128 }
     };
 
     switch (scene) {
       
       case 2:
-          sinFactor1 = 1.0;
-          sinFactor2 = 1.0;
-          sinFactor3 = 1.0;
-          sinFactor4 = 1.0;
-          slowDownFactor = 100;
-          fill_palette(palette, 256,  colors2, 11); 
+        sinFactor1 = 1.2;
+        sinFactor2 = 1.0;
+        sinFactor3 = 1.0;
+        sinFactor4 = 1.0;
+        slowDownFactor = 300;
+        fill_palette(palette, 256,  colors1, 8); 
         break;
 
       default:
-        scene = 1;
-        sinFactor1 = 1.0;
-        sinFactor2 = 1.0;
+        sinFactor1 = 1.2;
+        sinFactor2 = 1.2;
         sinFactor3 = 1.0;
-        sinFactor4 = 0.0;
-        slowDownFactor = 100;
-        fill_palette(palette, 256,  colors1, 9); 
+        sinFactor4 = 1.0;
+        slowDownFactor = 300;
+        fill_palette(palette, 256,  colors2, 11); 
+        scene = 1;
         break;
     }
 }
@@ -90,10 +89,10 @@ void PlasmaAnimation::calc_plasma()
     for(int y = 0; y < LF_ROWS; y++) {
         for(int x = 0; x < LF_COLS; x++) {
             double value =
-                      sin((dist(x + time / 3, y, LF_COLS / 2, LF_ROWS / 2) / leds) * sinFactor1)
-                    + sin((dist(x, y, LF_ROWS / 12, LF_ROWS / 6) / leds) * sinFactor2)
-                    + sin((dist(x, y + time / 2, LF_COLS, LF_ROWS) / leds ) * sinFactor3)
-                    + sin((dist(x, y, LF_COLS * 2, LF_COLS * 3) / leds) * sinFactor4)
+                      sin((dist(x + time, y, LF_COLS / 2, LF_ROWS / 2) / leds) * sinFactor1)
+                    + sin((dist(x, y, LF_ROWS / 6, LF_ROWS / 5) / leds) * sinFactor2)
+                    + sin((dist(x, y + time, LF_COLS, LF_ROWS) / leds ) * sinFactor3)
+                    + sin((dist(x, y, LF_COLS / 10, LF_COLS / 7) / leds) * sinFactor4)
                   ;
               int colNo = int((sins + value) * (255.0 / (sins*2)));
               rgb_pixel_t *px = lavaFrame.get_pixel(x, y);
