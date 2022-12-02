@@ -10,7 +10,7 @@ void CircleAnimation::reset() {
 PostAnimationAction CircleAnimation::animation(int *delay_in_msec) {
 
     static bool first_run = true;
-    static int r = 1;
+    static double r = 1;
     static int color_offset = 0;
 
     static rgb_pixel_t colors[] = {
@@ -53,16 +53,17 @@ PostAnimationAction CircleAnimation::animation(int *delay_in_msec) {
     lf_draw_striped_circle(start_x, start_y, r, true, (colors + color_offset), sizeof(colors) - color_offset);
     lavaFrame.push_to_strip();
 
-    r++;
+    r+= 0.1;
 
     if (r > max_radius) {
         r = 1;
         color_offset = random(0, sizeof(colors) - max_radius);
     }
-    *delay_in_msec = 500;
+    *delay_in_msec = 50;
 
     if (lavaFrame.next_animation_requested() == true) {
-        return PostAnimationAction::anim_done;
+      lavaFrame.reset_next_animation_request();
+      return PostAnimationAction::anim_done;
     }
 
     return PostAnimationAction::anim_continue;

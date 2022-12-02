@@ -78,7 +78,7 @@ void BubblesAnimation::calc_bubble(int i) {
 
     bubble_y[i] -= bubble_speed[i];
 
-    if (bubble_y[i] <= -bubble_radius[i]) {
+    if (bubble_y[i] <= -bubble_radius[i] * 2) {
         bubble_y[i] = LF_ROWS + bubble_radius[i];
     }
 }
