@@ -18,7 +18,7 @@ class Buttons {
 
   public:
     bool next_animation_requested = false;
-    bool animation_interaction_pressed = false;
+    bool change_orientation_pressed = false;
     bool slideshow_mode_is_hold = false;
     bool max_brightness_is_hold = false;
 

@@ -48,7 +48,7 @@ void Buttons::update_interactions() {
     		button_1_is_pressed == true &&
     		button_1_pressed_time > hold_ms; // hold button 1
 
-  	animation_interaction_pressed =
+  	change_orientation_pressed =
     		button_2_was_pressed == true &&
     		button_2_is_pressed == false &&
     		button_2_pressed_time < hold_ms; // short press button 2

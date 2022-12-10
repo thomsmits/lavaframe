@@ -52,11 +52,7 @@ PostAnimationAction LavaAnimation::animation(int *delay_in_msec) {
 
     *delay_in_msec = 30;
 
-    if (buttons.animation_interaction_pressed == true) {
-        // next_scene();
-    }
-
-    // clear field
+     // clear field
     for (int x = 0; x < LF_COLS; x++) {
         for (int y = 0; y < LF_ROWS; y++) {
             field[x][y] = 0;

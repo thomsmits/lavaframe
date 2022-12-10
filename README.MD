@@ -15,6 +15,16 @@ a white Ikea Sannahed frame 25x25 cm, 169 RGB LED and an ESP32.
   * [License](LICENSE.md)
   * [Sources](src/lavaframe/README.md)
 
+## Button usage
+
+| button | state | description                                            |
+| ------ | ----- | ------------------------------------------------------ |
+| 1      | press | next animation                                         |
+| 1      | hold  | change mode betweed *slideshow* and *single animation* |
+| 2      | press | change rotation                                        |
+| 2      | hold  | change brightness                                      |
+
+
 ## How to write an animation?
 
 If you want to add your own animation, you have to perform the following steps:

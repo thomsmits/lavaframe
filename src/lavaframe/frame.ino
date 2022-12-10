@@ -1,4 +1,5 @@
 #include "frame.h"
+#include <EEPROM.h>
 
 void Frame::clear() {
     memset(frame, 0, sizeof(rgb_pixel_t) * LF_ROWS * LF_COLS);
@@ -16,18 +17,18 @@ void Frame::fill(byte r, byte g, byte b) {
 }
 
 void Frame::push_to_strip() {
+    rgb_pixel_t *p;
     for (int y = 0; y < LF_ROWS; y++) {
         for (int x = 0; x < LF_COLS; x++) {
 
-            #if ORIENTATION == 0
-              rgb_pixel_t *p = get_pixel(x, y);
-            #elif ORIENTATION == 1
-              rgb_pixel_t *p = get_pixel(y, LF_COLS - 1 - x);
-            #elif ORIENTATION == 2
-              rgb_pixel_t *p = get_pixel(LF_ROWS - 1 - x, LF_COLS - 1 - y);
-            #elif ORIENTATION == 3
-              rgb_pixel_t *p = get_pixel(LF_ROWS - 1 - y, x);
-            #endif
+            if(orientation == 0)
+              p = get_pixel(x, y);
+            else if (orientation == 1)
+              p = get_pixel(y, LF_COLS - 1 - x);
+            else if (orientation == 2)
+              p = get_pixel(LF_ROWS - 1 - x, LF_COLS - 1 - y);
+            else if (orientation == 3)
+              p = get_pixel(LF_ROWS - 1 - y, x);
 
             leds[_tgt(x, y)] = CRGB(p->r, p->g, p->b);
         }
@@ -38,9 +39,12 @@ void Frame::push_to_strip() {
 void Frame::setup() {
 
     delay(3000);
-    FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
     setup_trace();
+
+    EEPROM.begin(EEPROM_SIZE);
+    
+    FastLED.addLeds<LED_TYPE,DATA_PIN,COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
 
     pinMode(BUTTON_1_PIN, INPUT_PULLDOWN);
     pinMode(BUTTON_2_PIN, INPUT_PULLDOWN);
@@ -55,6 +59,9 @@ void Frame::setup() {
     for (int i = 0; i < registered_animations_count; i++) {
         animations[i]->setup();
     }
+
+    orientation = EEPROM.read(EEPROM_ORIENTATION);
+    if (orientation < 0 || orientation > 3) orientation = 0;
 
     reset_next_animation_request();
 }
@@ -73,6 +80,25 @@ void Frame::loop() {
         while(buttons.slideshow_mode_is_hold == true) {
             buttons.update();
         }
+    }
+
+    if (buttons.change_orientation_pressed) {
+      orientation++;
+      if (orientation > 3) {
+        orientation = 0;
+      }
+      EEPROM.write(EEPROM_ORIENTATION, orientation);
+      EEPROM.commit();
+    }
+
+    if (buttons.max_brightness_is_hold) {
+      actual_Brightness += 32;
+      if (actual_Brightness > MAX_BRIGHTNESS + 30) {
+        actual_Brightness = MIN_BRIGHTNESS;
+      }
+      if (actual_Brightness > MAX_BRIGHTNESS) {
+        actual_Brightness = MAX_BRIGHTNESS;
+      }
     }
 
     EVERY_N_MILLISECONDS( 500 ) { adjust_global_brightness(); }
@@ -167,7 +193,7 @@ void Frame::adjust_global_brightness() {
     actual_Brightness = actual_Brightness + (targetBrightness - actual_Brightness) / 3;
     FastLED.setBrightness(actual_Brightness);  // set master brightness control
   #else
-    FastLED.setBrightness(MAX_BRIGHTNESS);   // set master brightness control
+    FastLED.setBrightness(actual_Brightness);   // set master brightness control
   #endif
 }
 
@@ -196,4 +222,26 @@ void Frame::set_pixel(int x, int y, byte _r, byte _g, byte _b) {
 
 void Frame::register_animation(Animation* animation) {
     animations[registered_animations_count++] = animation;
+}
+
+void Frame::testEEProm()
+{
+  while (!Serial);
+  if (!EEPROM.begin(512))
+  {
+    Serial.println("EEPROM failed to initialise");
+    while (true);
+  }
+  else
+  {
+    Serial.println("EEPROM initialised");
+  }
+  //EEPROM.write(0, 1);
+  for (int x = 0; x < 8; x++)
+  {
+    byte inByte = EEPROM.read(0);
+    Serial.print("read ");
+    Serial.println(inByte);
+    EEPROM.write(0, inByte * 2);
+  }
 }

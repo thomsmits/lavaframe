@@ -12,10 +12,6 @@ void FireAnimation::reset() {
 
 PostAnimationAction FireAnimation::animation(int *delay_in_msec) {
 
-    if (buttons.animation_interaction_pressed == true) {
-      // next_scene();
-    }
-
     calc_emitter();
     calc_fire();
     fire_to_leds();

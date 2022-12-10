@@ -2,6 +2,7 @@
 #define frame_h
 
 #include "animation.h"
+#include <EEPROM.h>
 
 #define MIN_BRIGHTNESS  32  // 0 to 255
 #define MAX_BRIGHTNESS  128 // 0 to 255
@@ -18,11 +19,18 @@
 // time between animations when in slideshow mode (in seconds)
 #define SLIDESHOW_DELAY 120  // 2 minutes
 
+#define EEPROM_SIZE 512
+
+#define EEPROM_ORIENTATION 0
+
 /**
  * Class representing the interface to the lava frame itself.
  */
 class Frame {
   private:
+
+    // Orientation of the display
+    byte orientation = 0;  // the rotation of the display (0-3), can be changed by button 
 
     // Counter for the loops
     int loop_count = 0;
@@ -142,6 +150,8 @@ class Frame {
      * depending on the ambient light sensor if present.
      */
     void adjust_global_brightness();
+
+    void testEEProm();
 };
 
 #endif
