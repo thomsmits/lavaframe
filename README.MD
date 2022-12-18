@@ -20,7 +20,7 @@ a white Ikea Sannahed frame 25x25 cm, 169 RGB LED and an ESP32.
 | button | state | description                                            |
 | ------ | ----- | ------------------------------------------------------ |
 | 1      | press | next animation                                         |
-| 1      | hold  | change mode betweed *slideshow* and *single animation* |
+| 1      | hold  | change mode between *slideshow* and *single animation* |
 | 2      | press | change rotation                                        |
 | 2      | hold  | change brightness                                      |
 
