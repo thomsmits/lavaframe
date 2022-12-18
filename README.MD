@@ -15,6 +15,9 @@ a white Ikea Sannahed frame 25x25 cm, 169 RGB LED and an ESP32.
   * [License](LICENSE.md)
   * [Sources](src/lavaframe/README.md)
 
+<img src="images/LavaFrame-01.jpg" style="width:500px; margin: 5px;"/>
+
+
 ## Button usage
 
 | button | state | description                                            |
