@@ -9,13 +9,13 @@
 	     LavaFrame. A meditative stylish light object
 	  created 2022 by Thomas Smits and Daniel Springwald
 
+<img src="images/LavaFrame-01.jpg" style="width:500px; margin: 5px;"/>
+
 This light object was created in 2022 in a hackathon based on
 a white Ikea Sannahed frame 25x25 cm, 169 RGB LED and an ESP32.
 
   * [License](LICENSE.md)
   * [Sources](src/lavaframe/README.md)
-
-<img src="images/LavaFrame-01.jpg" style="width:500px; margin: 5px;"/>
 
 
 ## Button usage
