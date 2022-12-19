@@ -31,44 +31,50 @@ a white Ikea Sannahed frame 25x25 cm, 169 RGB LED and an ESP32.
 
 ### Lava
 
-<img src="images/Lava-01.gif" style="width:320px; margin: 5px;"/>
-<img src="images/Lava-02.gif" style="width:320px; margin: 5px;"/>
-<img src="images/Lava-03.gif" style="width:320px; margin: 5px;"/>
-<img src="images/Lava-04.gif" style="width:320px; margin: 5px;"/>
+<p float="left">
+<img src="images/Lava-01.gif" style="width:240px; margin: 5px;"/>
+<img src="images/Lava-02.gif" style="width:240px; margin: 5px;"/>
+<img src="images/Lava-03.gif" style="width:240px; margin: 5px;"/>
+<img src="images/Lava-04.gif" style="width:240px; margin: 5px;"/>
+</p>
 
 ### Fire
 
-<img src="images/Fire-01.gif" style="width:320px; margin: 5px;"/>
-<img src="images/Fire-02.gif" style="width:320px; margin: 5px;"/>
-<img src="images/Fire-03.gif" style="width:320px; margin: 5px;"/>
-<img src="images/Fire-04.gif" style="width:320px; margin: 5px;"/>
+<p float="left">
+<img src="images/Fire-01.gif" style="width:240px; margin: 5px;"/>
+<img src="images/Fire-02.gif" style="width:240px; margin: 5px;"/>
+<img src="images/Fire-03.gif" style="width:240px; margin: 5px;"/>
+<img src="images/Fire-04.gif" style="width:240px; margin: 5px;"/>
+</p>
 
 ### Color Wheel
 
-<img src="images/ColorCycle-01.gif" style="width:320px; margin: 5px;"/>
-<img src="images/ColorCycle-02.gif" style="width:320px; margin: 5px;"/>
-<img src="images/ColorCycle-03.gif" style="width:320px; margin: 5px;"/>
-<img src="images/ColorCycle-04.gif" style="width:320px; margin: 5px;"/>
-
+<p float="left">
+<img src="images/ColorCycle-01.gif" style="width:240px; margin: 5px;"/>
+<img src="images/ColorCycle-02.gif" style="width:240px; margin: 5px;"/>
+<img src="images/ColorCycle-03.gif" style="width:240px; margin: 5px;"/>
+<img src="images/ColorCycle-04.gif" style="width:240px; margin: 5px;"/>
+</p>
 
 ### Bubbles
 
-<img src="images/Bubbles-01.gif" style="width:320px; margin: 5px;"/>
-<img src="images/Bubbles-02.gif" style="width:320px; margin: 5px;"/>
-
+<p float="left">
+<img src="images/Bubbles-01.gif" style="width:240px; margin: 5px;"/>
+<img src="images/Bubbles-02.gif" style="width:240px; margin: 5px;"/>
+</p>
 
 ### Plasma
 
-<img src="images/Plasma-01.gif" style="width:320px; margin: 5px;"/>
+<img src="images/Plasma-01.gif" style="width:240px; margin: 5px;"/>
 
 
 ### Circle
 
-<img src="images/Circle.gif" style="width:320px; margin: 5px;"/>
+<img src="images/Circle.gif" style="width:240px; margin: 5px;"/>
 
 ### Startup
 
-<img src="images/Startup.gif" style="width:320px; margin: 5px;"/>
+<img src="images/Startup.gif" style="width:240px; margin: 5px;"/>
 
 ## How to write an animation?
 
